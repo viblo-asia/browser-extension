@@ -1,0 +1,22 @@
+{
+    "name": "Viblo's News Feed",
+    "short_name": "Viblo",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description": "Getting latest Posts and Notifications from Viblo",
+    "content_scripts": [],
+    "web_accessible_resources": [],
+    "browser_action": {
+        "default_icon": "images/icon64.png",
+        "default_popup": "html/popup.html"
+    },
+    "permissions": [
+        "storage",
+        "tabs",
+        "<all_urls>"
+    ],
+    "icons": {
+        "64": "images/icon64.png"
+    },
+    "homepage_url": "https://viblo.asia"
+}
