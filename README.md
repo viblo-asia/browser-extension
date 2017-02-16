@@ -7,13 +7,18 @@
 ## Developing
 - Install neccessary `npm` packages
 ```
-npm install
+yarn install
 ```
 - Build javascript codes
 ```
-gulp
-// or
-gulp watch
+// for development
+npm run dev
+
+// watching files
+npm run watch
+
+// for production
+npm run production
 ```
 - Check coding convention
 ```

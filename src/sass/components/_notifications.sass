@@ -1,0 +1,44 @@
+.notification-container
+    padding: 0
+    overflow-y: auto
+    max-height: 315px
+
+    .notification-item
+        display: flex
+        padding: .5rem
+        white-space: normal
+        align-items: center
+        justify-content: space-between
+        border-bottom: 1px solid $base-border-color
+        background-color: lighten($gray-lighter, 10%)
+
+        &.read
+            background-color: lighten($gray-lighter, 7%)
+
+        &:hover
+            background-color: #FFF
+
+        .avatar
+            margin-right: 1rem
+
+        .notification-message
+            margin-right: auto
+            font-size: $font-size-base
+
+            a
+                font-weight: bold
+
+            &.no-sender
+                padding-left: 3.8rem
+
+        &:hover .notification-item-menu
+            visibility: visible !important
+
+    .notification-item:last-of-type
+        border-bottom: none !important
+
+    .notification-status
+        padding: 10px 0
+
+    .infinite-status-prompt
+        display: none !important
