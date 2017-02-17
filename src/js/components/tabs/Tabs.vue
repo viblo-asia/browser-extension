@@ -2,7 +2,7 @@
     <div>
         <div class="tabs is-toggle is-fullwidth">
             <ul>
-                <li v-for="tab in tabs" :class="{ 'is-active': tab.active }">
+                <li v-for="tab in orderedTabs" :class="{ 'is-active': tab.active }">
                     <a :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
                 </li>
             </ul>
@@ -23,6 +23,12 @@
 
         created() {
             this.tabs = this.$children;
+        },
+
+        computed: {
+            orderedTabs() {
+                return _.orderBy(this.tabs, (tab) => tab.position);
+            }
         },
 
         methods: {

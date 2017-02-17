@@ -1,5 +1,5 @@
-import {NOTIFICATION_KEY} from '../constants';
-import LocalStorage from '../storage/LocalStorage';
+import Counter from '../services/Counter';
+import {localStorage} from '../storage/ChromeStorage';
 
 class Notifier {
     constructor(notification) {
@@ -7,9 +7,14 @@ class Notifier {
     }
 
     send() {
+        let isNewPost = this.isPostPublishedNotification();
+        this.storePostKey().then(() => this.buildNotification(isNewPost));
+    }
+
+    buildNotification(isNewPost) {
         chrome.notifications.create(this.notification.id, this.getOptions(), (id) => {
-            this.incrementCounter();
-            setTimeout(() => this.close(id) , 3500);
+            Counter.increment(isNewPost);
+            setTimeout(() => this.close(id) , 5000);
         });
     }
 
@@ -17,28 +22,42 @@ class Notifier {
         chrome.notifications.clear(id);
     }
 
-    incrementCounter() {
-        let counter = LocalStorage.get(NOTIFICATION_KEY);
-        let newCounter = counter ? parseInt(counter) + 1 : 1;
-        LocalStorage.set(NOTIFICATION_KEY, newCounter);
-
-        chrome.browserAction.setBadgeText({text: newCounter.toString()});
-    }
-
     getOptions() {
         let iconUrl = '../../images/icon64.png';
         let message = this.notification.message.replace(/(<([^>]+)>)/ig, '');
-        if (this.notification.hasOwnProperty('sender')) {
-            iconUrl = this.notification.sender.avatar;
-        }
 
         return {
             iconUrl,
             message,
             type: 'basic',
             isClickable: true,
-            title: 'New Notification on Viblo'
+            title: 'New Viblo Notification'
         };
+    }
+
+    storePostKey() {
+        return new Promise((resolve) => {
+            if (!this.isPostPublishedNotification()) {
+                resolve();
+
+                return;
+            }
+
+            let feedNewest = [];
+            let key = this.notification.post.slug;
+            localStorage.find('feedNewest', (storedKeys) => {
+                if (!(storedKeys && Array.isArray(storedKeys))) {
+                    storedKeys = [];
+                }
+
+                feedNewest = storedKeys.concat(key);
+                localStorage.set({feedNewest}, () => resolve());
+            });
+        });
+    }
+
+    isPostPublishedNotification() {
+        return this.notification.type === 'Framgia\\Viblo\\Notifications\\PostPublished';
     }
 }
 

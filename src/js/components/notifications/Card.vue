@@ -12,9 +12,6 @@
 </template>
 
 <script>
-    import _ from 'lodash';
-    import {ROOT_URL} from '../../constants';
-
     export default {
         props: {
             notification: {
@@ -47,7 +44,7 @@
                     throw new Error('Invalid user provided');
                 }
 
-                return `${ROOT_URL}/u/${user.username}`;
+                return `${EXTENSION_ROOT_URL}/u/${user.username}`;
             }
         },
 

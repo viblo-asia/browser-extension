@@ -24,6 +24,10 @@ npm run production
 ```
 eslint src/js
 ```
+- Environment configurations: 
+To configure the environment variables which will be used in the extension codebase, *we need to copy the `.env.example` file in the root directory to a new file called `.env`. Here, we can modify the value of variables to match the current working environment*, and Webpack will take care of the process of replacing the environment variables in the codebase.
+- Front-end: http://bulma.io/
+- Build tool: https://www.npmjs.com/package/laravel-mix
 
 ## Change Logs
 View all change logs [here](./changelogs.md)
