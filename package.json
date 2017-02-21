@@ -10,6 +10,8 @@
     "axios": "^0.15.3",
     "babel-eslint": "7.*",
     "bulma": "^0.3.1",
+    "deep-assign": "^2.0.0",
+    "dotenv": "^4.0.0",
     "laravel-echo": "^1.2.4",
     "laravel-mix": "^0.7.4",
     "lodash": "^4.17.4",

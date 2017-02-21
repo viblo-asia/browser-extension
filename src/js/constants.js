@@ -1,9 +1,7 @@
-export const ROOT_URL = 'https://viblo.asia';
-export const ECHO_URL = 'https://viblo.asia:6001';
-export const CHROME_SYNC_KEY = 'VIBLO_CHROME_SYNCED_DATA';
-export const NOTIFICATION_KEY = 'VIBLO_UNREAD_NOTIFICATION_COUNT';
+export const CHROME_SYNC_KEY = 'VIBLO_CHROME_SYNC_DATA';
+export const CHROME_LOCAL_KEY = 'VIBLO_CHROME_LOCAL_DATA';
 
-export const USER_API = `${ROOT_URL}/api/user`;
-export const FEED_NEWEST_API = `${ROOT_URL}/api/feed/newest`;
-export const NOTIFICATIONS_API = `${ROOT_URL}/api/notifications`;
-export const NOTIFICATION_CLEAR_API = `${ROOT_URL}/api/notifications/clear`;
+export const API_USER = `${EXTENSION_ROOT_URL}/api/user`;
+export const API_FEED_NEWEST = `${EXTENSION_ROOT_URL}/api/feed/newest`;
+export const API_NOTIFICATIONS = `${EXTENSION_ROOT_URL}/api/notifications`;
+export const API_NOTIFICATION_CLEAR = `${EXTENSION_ROOT_URL}/api/notifications/clear`;

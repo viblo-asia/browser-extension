@@ -1,34 +1,38 @@
 import axios from 'axios';
 import Echo from 'laravel-echo';
 import Tab from '../services/Tab';
+import {API_USER} from '../constants';
 import * as io from 'socket.io-client';
+import Counter from '../services/Counter';
 import Notifier from '../services/Notifier';
-import Storage from '../storage/ChromeSyncStorage';
-import LocalStorage from '../storage/LocalStorage';
-import {ECHO_URL, USER_API, NOTIFICATION_KEY} from '../constants';
+import {initStorages, syncedStorage} from '../storage/ChromeStorage'
 
 window.io = io;
-
-let counter = LocalStorage.get(NOTIFICATION_KEY);
-if (counter) {
-    chrome.browserAction.setBadgeText({text: counter.toString()});
-}
+initStorages().then(() => chrome.runtime.reload());
+Counter.setBadgeTextContent();
 
 chrome.notifications.onClicked.addListener(() => {
+    // TODO: create new tab which linked to post
     Tab.create('https://viblo.asia/notifications');
 });
 
-let storage = new Storage();
-storage.find('oauthToken', (oauthToken) => {
-    if (oauthToken) {
-        let options = {
-            host: ECHO_URL,
-            broadcaster: 'socket.io',
-            namespace: 'Framgia.Viblo.Events',
-            reconnectionAttempts: 2,
-            reconnectionDelay: 5000
-        };
+let options = {
+    host: EXTENSION_ECHO_URL,
+    broadcaster: 'socket.io',
+    namespace: 'Framgia.Viblo.Events',
+    reconnectionAttempts: 2,
+    reconnectionDelay: 5000
+};
+let echo = new Echo(options);
 
+echo.channel('newly-published-post')
+    .notification((notification) => {
+        let notifier = new Notifier(notification);
+        notifier.send();
+    });
+
+syncedStorage.find('oauthToken', (oauthToken) => {
+    if (oauthToken) {
         options = Object.assign({}, options, {
             auth: {
                 headers: {
@@ -43,13 +47,15 @@ storage.find('oauthToken', (oauthToken) => {
             'Authorization': oauthToken
         };
 
-        axios.get(USER_API)
+        axios.get(API_USER)
             .then((response) => {
-                let echo = new Echo(options);
                 let user = response.data.data;
-
                 echo.private(`Framgia.Viblo.Models.User.${user.id}`)
                     .notification((notification) => {
+                        if (notification.type === 'Framgia\\Viblo\\Notifications\\PostPublished') {
+                            return;
+                        }
+
                         let notifier = new Notifier(notification);
                         notifier.send();
                     });

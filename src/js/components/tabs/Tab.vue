@@ -13,6 +13,11 @@
             selected: {
                 type: Boolean,
                 default: false
+            },
+
+            position: {
+                type: Number,
+                required: true
             }
         },
 

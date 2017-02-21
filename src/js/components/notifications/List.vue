@@ -16,10 +16,9 @@
 </template>
 
 <script>
-    import _ from 'lodash';
     import NotificationCard from './Card.vue';
     import InfiniteLoading from 'vue-infinite-loading';
-    import {NOTIFICATIONS_API, NOTIFICATION_CLEAR_API} from '../../constants';
+    import {API_NOTIFICATIONS, API_NOTIFICATION_CLEAR} from '../../constants';
 
     export default {
         components: {
@@ -30,7 +29,7 @@
         data() {
             return {
                 notifications: [],
-                nextPageUrl: NOTIFICATIONS_API
+                nextPageUrl: API_NOTIFICATIONS
             };
         },
 
@@ -54,7 +53,7 @@
 
             clearNotifications(shouldDelete = false) {
                 let params = shouldDelete ? { delete: true } : {};
-                axios.get(NOTIFICATION_CLEAR_API, { params });
+                axios.get(API_NOTIFICATION_CLEAR, { params });
             },
 
             autoclearNotifications() {

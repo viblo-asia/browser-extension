@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import {getChromeStorage} from '../util';
+let deepAssign = require('deep-assign');
 
 class Storage {
-    constructor(isLocal) {
-        this.storage = getChromeStorage(isLocal);
+    constructor(local) {
+        this.storage = getChromeStorage(local);
     }
 
     getRoot(key, callback) {
@@ -28,10 +29,10 @@ class Storage {
         this.getRoot(key, (syncedData) => {
             let newData = {};
 
-            if (!(syncedData && syncedData.hasOwnProperty(key))) {
+            if (!syncedData) {
                 newData[key] = data;
             } else {
-                newData[key] = _.assign(syncedData[key], data);
+                newData[key] = deepAssign({}, syncedData, data);
             }
 
             this.storage.set(newData, () => {

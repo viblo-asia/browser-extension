@@ -2,6 +2,9 @@ let path = require('path');
 let webpack = require('webpack');
 let Mix = require('laravel-mix').config;
 let plugins = require('laravel-mix').plugins;
+let env = require('./env.loader')({
+    NODE_ENV: process.env.NODE_ENV || 'development'
+});
 
 
 /*
@@ -285,6 +288,8 @@ module.exports.plugins = (module.exports.plugins || []).concat([
     new plugins.WebpackMd5HashPlugin(),
 
     new webpack.IgnorePlugin(/pusher-js/),
+
+    new webpack.DefinePlugin(env),
 
     new webpack.LoaderOptionsPlugin({
         minimize: Mix.inProduction,

@@ -1,7 +1,7 @@
-export function getChromeStorage(isLocal = false) {
-    if (!isLocal) {
-        return chrome.storage.sync;
+export function getChromeStorage(local = false) {
+    if (local) {
+        return chrome.storage.local;
     }
 
-    return chrome.storage.local;
+    return chrome.storage.sync;
 }
