@@ -1,37 +1,28 @@
 import axios from 'axios';
 import Echo from 'laravel-echo';
-import Tab from '../services/Tab';
-import {API_USER} from '../constants';
 import * as io from 'socket.io-client';
 import Counter from '../services/Counter';
 import Notifier from '../services/Notifier';
 import {initStorages, syncedStorage} from '../storage/ChromeStorage'
+import Auth from '../services/Auth';
 
 window.io = io;
 initStorages().then(() => chrome.runtime.reload());
 Counter.setBadgeTextContent();
 
-chrome.notifications.onClicked.addListener(() => {
-    // TODO: create new tab which linked to post
-    Tab.create('https://viblo.asia/notifications');
+chrome.notifications.onClicked.addListener((notificationId) => {
+    Notifier.open(notificationId);
 });
 
-let options = {
-    host: EXTENSION_ECHO_URL,
-    broadcaster: 'socket.io',
-    namespace: 'Framgia.Viblo.Events',
-    reconnectionAttempts: 2,
-    reconnectionDelay: 5000
-};
-let echo = new Echo(options);
-
-echo.channel('newly-published-post')
-    .notification((notification) => {
-        let notifier = new Notifier(notification);
-        notifier.send();
-    });
-
 syncedStorage.find('oauthToken', (oauthToken) => {
+    let options = {
+        host: EXTENSION_ECHO_URL,
+        broadcaster: 'socket.io',
+        namespace: 'Framgia.Viblo.Events',
+        reconnectionAttempts: 2,
+        reconnectionDelay: 5000
+    };
+
     if (oauthToken) {
         options = Object.assign({}, options, {
             auth: {
@@ -46,19 +37,29 @@ syncedStorage.find('oauthToken', (oauthToken) => {
             'X-Requested-With': 'XMLHttpRequest',
             'Authorization': oauthToken
         };
-
-        axios.get(API_USER)
-            .then((response) => {
-                let user = response.data.data;
-                echo.private(`Framgia.Viblo.Models.User.${user.id}`)
-                    .notification((notification) => {
-                        if (notification.type === 'Framgia\\Viblo\\Notifications\\PostPublished') {
-                            return;
-                        }
-
-                        let notifier = new Notifier(notification);
-                        notifier.send();
-                    });
-            });
     }
+
+    let echo = new Echo(options);
+
+    listen(echo, oauthToken ? true : false);
 });
+
+const listen = (echo, authenticated) => {
+    const getUser = authenticated ? Auth.get() : new Promise((resolve) => resolve(null));
+
+    getUser.then((user) => {
+        echo.channel('newly-published-post')
+            .listen('Posts\\Published', (data) => {
+                if (!user || user.id !== data.post.author.id) {
+                    Notifier.sendNewPost(data);
+                }
+            });
+
+        if (user) {
+            echo.private(`Framgia.Viblo.Models.User.${user.id}`)
+                .notification((notification) => {
+                    Notifier.sendNotification(notification);
+                });
+        }
+    });
+}

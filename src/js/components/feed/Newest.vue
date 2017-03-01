@@ -6,7 +6,7 @@
 
         <div class="feed-wrapper">
             <template v-for="post in posts">
-                <post :post="post"></post>
+                <post :post="post" :is-new="isNewPost(post.slug)"></post>
             </template>
 
             <infinite-loading
@@ -14,6 +14,10 @@
                 ref="infiniteLoading"
                 :on-infinite="getNewestPosts"
             />
+        </div>
+
+        <div v-if="!loading" class="has-text-centered">
+            <a style="margin:5px;padding:15px" class="button is-primary" :href="rootUrl" target="__blank">See More</a>
         </div>
     </div>
 </template>
@@ -25,16 +29,19 @@
 
 <script>
     import Post from './Post';
-    import {API_FEED_NEWEST} from '../../constants';
     import InfiniteLoading from 'vue-infinite-loading';
-    import {localStorage} from '../../storage/ChromeStorage';
+    import api from '../../api';
+    import NewPosts from '../../services/NewPosts';
+    import {ROOT_URL} from '../../constants';
 
     export default {
         data() {
             return {
                 keys: '',
                 posts: [],
-                nextPageUrl: API_FEED_NEWEST
+                loading: true,
+                newPosts: [],
+                rootUrl: ROOT_URL
             };
         },
 
@@ -43,29 +50,26 @@
             InfiniteLoading
         },
 
-        methods: {
-            getNewestPosts() {
-                axios.get(this.nextPageUrl, {params: {keys: this.keys}})
-                    .then(({data}) => {
-                        let {paginator} = data.data;
-                        let posts = this.posts;
-                        this.posts = _.concat(posts, paginator.data);
-
-                        let nextPageUrl = paginator.next_page_url;
-                        if (nextPageUrl) {
-                            this.nextPageUrl = nextPageUrl;
-                            this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
-                        } else {
-                            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-                        }
-                    });
-            }
+        mounted() {
+            NewPosts.get()
+                .then((newPosts) => {
+                    this.newPosts = newPosts;
+                });
         },
 
-        created() {
-            localStorage.find('feedNewest', (keys) => {
-                this.keys = (keys && Array.isArray(keys)) ? keys.join(',') : '';
-            });
-        }
+        methods: {
+            getNewestPosts() {
+                api.getNewestPosts()
+                    .then((newPosts) => {
+                        this.posts = newPosts || [];
+                        this.loading = false;
+                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
+                    });
+            },
+
+            isNewPost(key) {
+                return this.newPosts.includes(key);
+            }
+        },
     }
 </script>
