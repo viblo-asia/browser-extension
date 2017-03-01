@@ -53,7 +53,9 @@
         mounted() {
             NewPosts.get()
                 .then((newPosts) => {
-                    this.newPosts = newPosts;
+                    if (newPosts) {
+                        this.newPosts = newPosts;
+                    }
                 });
         },
 
