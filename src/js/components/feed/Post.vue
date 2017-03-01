@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card" :class="{highlighted: isNew}">
         <div class="card-content">
             <div class="media">
                 <div class="media-left">
@@ -10,10 +10,10 @@
 
                 <div class="media-content">
                     <div>
-                        <a :href="postUrl"target="_blank" class="is-6 fw-bold mb-0" v-text="post.title"></a>
+                        <a :href="postUrl" class="is-6 fw-bold mb-0" v-text="post.title"></a>
                     </div>
                     <div>
-                        <a :href="userUrl" target="_blank">
+                        <a :href="userUrl">
                             <small><strong v-text="post.user.name"></strong></small> <small v-text="username"></small>
                         </a>
                         <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ post.published_at | ago }}</small>
@@ -24,12 +24,26 @@
     </div>
 </template>
 
+<style lang="sass">
+    .card
+        &.highlighted
+            background-color: rgba(75, 205, 159, .15)
+
+            &:hover
+                background-color: rgba(75, 205, 159, .35)
+</style>
+
 <script>
     export default {
         props: {
             post: {
                 type: Object,
                 required: true
+            },
+
+            'is-new': {
+                type: Boolean,
+                default: false
             }
         },
 

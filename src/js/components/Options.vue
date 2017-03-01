@@ -30,7 +30,7 @@
                     </label>
 
                     <label class="radio">
-                        <input type="radio" value="post" v-model="form.badgeTextType">
+                        <input :disabled="!this.form.newPostNotification" type="radio" value="post" v-model="form.badgeTextType">
                         <strong>New Posts Counter</strong>
                     </label>
 

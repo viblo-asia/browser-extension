@@ -1,64 +1,90 @@
-import Counter from '../services/Counter';
-import {localStorage} from '../storage/ChromeStorage';
+import _ from 'lodash';
+import NewPosts from './NewPosts';
+import Tab from '../services/Tab';
+import Counter, {NEW_POSTS, UNREAD_NOTIFICATIONS} from '../services/Counter';
+import {ROOT_URL} from '../constants';
 
-class Notifier {
-    constructor(notification) {
-        this.notification = notification;
-    }
+const NotificationStore = {
+    items: [],
 
-    send() {
-        let isNewPost = this.isPostPublishedNotification();
-        this.storePostKey().then(() => this.buildNotification(isNewPost));
-    }
+    store(notification) {
+        this.items = [...this.items, notification];
+    },
 
-    buildNotification(isNewPost) {
-        chrome.notifications.create(this.notification.id, this.getOptions(), (id) => {
-            Counter.increment(isNewPost);
-            setTimeout(() => this.close(id) , 5000);
-        });
-    }
+    get(id, callback) {
+        const notification = _.find(this.items, {id});
 
-    close(id) {
-        chrome.notifications.clear(id);
-    }
+        if (typeof callback === 'function') {
+            callback(notification);
+        }
 
-    getOptions() {
-        let iconUrl = '../../images/icon64.png';
-        let message = this.notification.message.replace(/(<([^>]+)>)/ig, '');
+        return notification;
+    },
 
-        return {
-            iconUrl,
-            message,
-            type: 'basic',
-            isClickable: true,
-            title: 'New Viblo Notification'
-        };
-    }
-
-    storePostKey() {
-        return new Promise((resolve) => {
-            if (!this.isPostPublishedNotification()) {
-                resolve();
-
-                return;
-            }
-
-            let feedNewest = [];
-            let key = this.notification.post.slug;
-            localStorage.find('feedNewest', (storedKeys) => {
-                if (!(storedKeys && Array.isArray(storedKeys))) {
-                    storedKeys = [];
-                }
-
-                feedNewest = storedKeys.concat(key);
-                localStorage.set({feedNewest}, () => resolve());
-            });
-        });
-    }
-
-    isPostPublishedNotification() {
-        return this.notification.type === 'Framgia\\Viblo\\Notifications\\PostPublished';
+    clear(id) {
+        if (id) {
+            this.items = _.filter(this.items, (item) => item.id !== id);
+        }
     }
 }
 
-export default Notifier;
+const getOptions = (message) => {
+    const escapedMessage = message.replace(/(<([^>]+)>)/ig, '');
+
+    return {
+        iconUrl: '../../images/icon64.png',
+        message: escapedMessage,
+        type: 'basic',
+        isClickable: true,
+        title: 'New Viblo Notification'
+    }
+};
+
+const send = (notification, type) => {
+    chrome.notifications.create(notification.id, getOptions(notification.message), (id) => {
+        NotificationStore.store(notification);
+
+        Counter.increment(type);
+
+        setTimeout(() => {
+            chrome.notifications.clear(id);
+            NotificationStore.clear(id);
+        }, 5000);
+    });
+}
+
+const dontNotify = [
+    'Framgia\\Viblo\\Notifications\\PostPublished'
+];
+
+const targetUrl = (notification) => {
+    if (notification.post) {
+        const post = notification.post;
+
+        return post.url || `${ROOT_URL}/${post.author}/posts/${post.slug}`;
+    }
+
+    return `${ROOT_URL}/notifications`;
+}
+
+export default {
+    sendNotification(notification) {
+        if (dontNotify.indexOf(notification.type) === -1) {
+            send(notification, UNREAD_NOTIFICATIONS);
+        }
+    },
+
+    sendNewPost(data) {
+        send(data, NEW_POSTS)
+        return NewPosts.push(data.post);
+    },
+
+    open(id) {
+        NotificationStore.get(id, (notification) => {
+            if (notification) {
+                const url = targetUrl(notification);
+                Tab.create(url);
+            }
+        });
+    }
+}

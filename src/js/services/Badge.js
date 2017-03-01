@@ -9,7 +9,7 @@ class Badge {
     }
 
     render() {
-        if (!this.text) {
+        if (this.text === null) {
             return;
         }
 

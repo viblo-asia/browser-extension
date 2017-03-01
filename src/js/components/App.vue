@@ -58,11 +58,11 @@
     import Tab from './tabs/Tab.vue';
     import Tabs from './tabs/Tabs.vue';
     import Options from './Options.vue';
-    import Badge from '../services/Badge';
     import {API_USER} from '../constants';
     import FeedNewest from './feed/Newest.vue';
     import Notifications from './notifications/List.vue';
     import {syncedStorage, localStorage} from '../storage/ChromeStorage';
+    import Counter from '../services/Counter';
 
     export default {
         data() {
@@ -104,7 +104,7 @@
         },
 
         mounted() {
-            // TODO: clear the counters and badge text
+            Counter.clear();
         }
     }
 </script>
