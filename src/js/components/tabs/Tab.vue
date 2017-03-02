@@ -5,9 +5,18 @@
 <script>
     export default {
         props: {
+            id: {
+                type: String,
+                required: true
+            },
             name: {
                 type: String,
                 required: true
+            },
+
+            badge: {
+                type: Number,
+                default: 0
             },
 
             selected: {
@@ -25,12 +34,6 @@
             return {
                 active: false
             };
-        },
-
-        computed: {
-            href() {
-                return '#' + this.name.toLowerCase().replace(/ /g, '-');
-            }
         },
 
         mounted() {

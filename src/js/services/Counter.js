@@ -1,65 +1,66 @@
+import _ from 'lodash';
 import Badge from './Badge';
-import {localStorage, syncedStorage} from '../storage/ChromeStorage';
-let deepAssign = require('deep-assign');
+import {localStorage} from '../storage/ChromeStorage';
+import Settings from './Settings';
+
+const COUNTERS_STORAGE_KEY = 'counters';
 
 export const NEW_POSTS = 'newPosts';
 export const UNREAD_NOTIFICATIONS = 'unreadNotifications';
 
-const getBadgeCounterKey = () => new Promise((resolve) => {
-    syncedStorage.find('options', (options) => {
-        if (options && options.hasOwnProperty('badgeTextType')) {
-            let type = options.badgeTextType === 'all'
-                ? 'unreadNotifications'
-                : 'newPosts';
-
-            resolve(type);
-        }
-    });
-});
-
 export default {
-    increment(isNewPost) {
-        localStorage.find('counters', (counters) => {
-            let data = {};
-            let keys = ['unreadNotifications'];
-            if (isNewPost) {
-                keys = keys.concat('newPosts');
-            }
+    increment(type) {
+        this.get(type, (value) => {
+            const next = value ? value + 1 : 1;
+            this.set(type, next);
+        })
+    },
 
-            keys.forEach((key) => {
-                let counter = 0;
-                if (counters.hasOwnProperty(key) && counters[key] >= 0) {
-                    counter = counters[key] + 1;
+    set(type, value) {
+        return new Promise((resolve) => {
+            localStorage.set({
+                [COUNTERS_STORAGE_KEY]: {
+                    [type]: value
                 }
-
-                data[key] = counter;
+            }, () => {
+                this.setBadgeTextContent();
+                resolve();
             });
-
-            counters = deepAssign({}, counters, data);
-            localStorage.set({counters}, () => this.setBadgeTextContent());
         });
     },
 
-    clear() {
-        localStorage.find('counters', () => {
-            const counters = {
-                [NEW_POSTS]: 0,
-                [UNREAD_NOTIFICATIONS]: 0
-            };
+    get(type, callback) {
+        if (typeof callback !== 'function') {
+            return;
+        }
 
-            localStorage.set({counters}, () => this.setBadgeTextContent());
+        localStorage.find(COUNTERS_STORAGE_KEY, (counters) => {
+            if (!counters) {
+                callback(null);
+            }
+
+            const value = type ? counters[type] : counters;
+            callback(value);
         });
+    },
+
+    clear(type) {
+        return this.set(type, 0);
     },
 
     setBadgeTextContent() {
-        getBadgeCounterKey().then((key) => {
-            if (key) {
-                localStorage.find('counters', (counters) => {
-                    if (counters.hasOwnProperty(key)) {
-                        let badge = new Badge(counters[key]);
-                        badge.render();
-                    }
-                });
+        Settings.get('badgeTextType', (type) => {
+            if (type) {
+                if (type === 'all') {
+                    type = null;
+                }
+
+                this.get(type, (value) => {
+                    const count = type ? value || 0 : _.sum(_.values(value));
+
+                    let badge = new Badge(count);
+                    badge.render();
+                })
             }
         });
     }

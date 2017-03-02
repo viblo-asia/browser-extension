@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a href="https://viblo.asia" target="_blank">
+        <a href="https://viblo.asia" tabindex="-1" target="_blank">
             <div class="hero">
                 <div class="hero-body">
                     <div class="container">
@@ -21,15 +21,21 @@
 
         <div class="content-wrapper">
             <tabs class="navigation">
-                <tab name="Newst Posts" :selected="true" :position="1">
+                <tab id="newest-posts" name="Newest Posts" :selected="true" :position="1"
+                    @selected="this.readNewPosts" @leave="clearTabBadge('newPosts')"
+                    :badge="this.counters.newPosts"
+                >
                     <feed-newest></feed-newest>
                 </tab>
 
-                <tab name="Notifications" v-if="authenticated" :position="2">
+                <tab id="notifications" name="Notifications" v-if="authenticated" :position="2"
+                    @selected="this.clearNotifications" @leave="clearTabBadge('unreadNotifications')"
+                    :badge="this.counters.unreadNotifications"
+                >
                     <notifications></notifications>
                 </tab>
 
-                <tab name="Settings" :position="3">
+                <tab id="settings" name="Settings" :position="3">
                     <options></options>
                 </tab>
             </tabs>
@@ -55,20 +61,25 @@
 </style>
 
 <script>
+    import api from '../api';
     import Tab from './tabs/Tab.vue';
     import Tabs from './tabs/Tabs.vue';
     import Options from './Options.vue';
-    import {API_USER} from '../constants';
     import FeedNewest from './feed/Newest.vue';
     import Notifications from './notifications/List.vue';
-    import {syncedStorage, localStorage} from '../storage/ChromeStorage';
+    import {syncedStorage} from '../storage/ChromeStorage';
     import Counter from '../services/Counter';
+    import NotificationsService, {NEW_POSTS, UNREAD_NOTIFICATIONS} from '../services/Notifications';
 
     export default {
         data() {
             return {
                 currentUser: null,
-                authenticated: false
+                authenticated: false,
+                counters: {
+                    newPosts: 0,
+                    unreadNotifications: 0
+                }
             };
         },
 
@@ -80,16 +91,25 @@
             Notifications
         },
 
-        methods: {
-            getCurrentUser() {
-                axios.get(API_USER)
-                    .then((response) => this.currentUser = response.data.data);
-            }
-        },
-
         computed: {
             userUrl() {
                 return `${EXTENSION_ROOT_URL}/u/${this.currentUser.username}`;
+            }
+        },
+
+        methods: {
+            readNewPosts() {
+                NotificationsService.clear(NEW_POSTS);
+            },
+
+            clearNotifications() {
+                NotificationsService.clear(UNREAD_NOTIFICATIONS);
+            },
+
+            clearTabBadge(type) {
+                if (this.counters.hasOwnProperty(type)) {
+                    this.counters[type] = 0;
+                }
             }
         },
 
@@ -98,13 +118,14 @@
                 this.authenticated = value;
 
                 if (this.authenticated) {
-                    this.getCurrentUser();
+                    api.getUser().then((user) => this.currentUser = user);
                 }
             });
-        },
 
-        mounted() {
-            Counter.clear();
-        }
+            Counter.get(null, (counters) => {
+                const { newPosts, unreadNotifications } = counters;
+                this.counters = {  newPosts, unreadNotifications  };
+            });
+        },
     }
 </script>

@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import NewPosts from './NewPosts';
 import Tab from '../services/Tab';
 import Counter, {NEW_POSTS, UNREAD_NOTIFICATIONS} from '../services/Counter';
 import {ROOT_URL} from '../constants';
@@ -76,7 +75,6 @@ export default {
 
     sendNewPost(data) {
         send(data, NEW_POSTS)
-        return NewPosts.push(data.post);
     },
 
     open(id) {

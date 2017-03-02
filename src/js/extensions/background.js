@@ -5,6 +5,7 @@ import Counter from '../services/Counter';
 import Notifier from '../services/Notifier';
 import {initStorages, syncedStorage} from '../storage/ChromeStorage'
 import Auth from '../services/Auth';
+import Settings from '../services/Settings';
 
 window.io = io;
 initStorages().then(() => chrome.runtime.reload());
@@ -48,12 +49,16 @@ const listen = (echo, authenticated) => {
     const getUser = authenticated ? Auth.get() : new Promise((resolve) => resolve(null));
 
     getUser.then((user) => {
-        echo.channel('newly-published-post')
-            .listen('Posts\\Published', (data) => {
-                if (!user || user.id !== data.post.author.id) {
-                    Notifier.sendNewPost(data);
-                }
-            });
+        Settings.get('newPostNotification', (value) => {
+            if (value) {
+                echo.channel('newly-published-post')
+                    .listen('Posts\\Published', (data) => {
+                        if (!user || user.id !== data.post.author.id) {
+                            Notifier.sendNewPost(data);
+                        }
+                    });
+            }
+        });
 
         if (user) {
             echo.private(`Framgia.Viblo.Models.User.${user.id}`)
