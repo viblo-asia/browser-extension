@@ -18,7 +18,8 @@
 <script>
     import NotificationCard from './Card.vue';
     import InfiniteLoading from 'vue-infinite-loading';
-    import {API_NOTIFICATIONS, API_NOTIFICATION_CLEAR} from '../../constants';
+    import {API_NOTIFICATIONS} from '../../constants';
+    import Notifications, {UNREAD_NOTIFICATIONS} from '../../services/Notifications';
 
     export default {
         components: {
@@ -49,17 +50,6 @@
                             this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
                         }
                     });
-            },
-
-            clearNotifications(shouldDelete = false) {
-                let params = shouldDelete ? { delete: true } : {};
-                axios.get(API_NOTIFICATION_CLEAR, { params });
-            },
-
-            autoclearNotifications() {
-                _.debounce(() => {
-                    this.clearNotifications();
-                }, 100, { 'maxWait': 500, 'trailing': true })();
             }
         },
 
@@ -93,7 +83,11 @@
 
         mounted() {
             this.getNotifications();
-            this.autoclearNotifications();
+
+            Notifications.getLastOpen(UNREAD_NOTIFICATIONS)
+                .then((lastOpen) => {
+                    this.lastOpen = lastOpen;
+                });
         }
     }
 </script>

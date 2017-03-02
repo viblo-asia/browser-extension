@@ -11,6 +11,15 @@
     </li>
 </template>
 
+<style lang="sass">
+    .notification-item
+        &.unread
+            background-color: rgba(75, 205, 159, .15)
+
+            &:hover
+                background-color: rgba(75, 205, 159, .35)
+</style>
+
 <script>
     export default {
         props: {

@@ -6,7 +6,7 @@
 
         <div class="feed-wrapper">
             <template v-for="post in posts">
-                <post :post="post" :is-new="isNewPost(post.slug)"></post>
+                <post :post="post" :is-new="isNewPost(post)"></post>
             </template>
 
             <infinite-loading
@@ -31,7 +31,7 @@
     import Post from './Post';
     import InfiniteLoading from 'vue-infinite-loading';
     import api from '../../api';
-    import NewPosts from '../../services/NewPosts';
+    import Notifications, {NEW_POSTS} from '../../services/Notifications';
     import {ROOT_URL} from '../../constants';
 
     export default {
@@ -40,7 +40,7 @@
                 keys: '',
                 posts: [],
                 loading: true,
-                newPosts: [],
+                lastOpen: null,
                 rootUrl: ROOT_URL
             };
         },
@@ -51,11 +51,9 @@
         },
 
         mounted() {
-            NewPosts.get()
-                .then((newPosts) => {
-                    if (newPosts) {
-                        this.newPosts = newPosts;
-                    }
+            Notifications.getLastOpen(NEW_POSTS)
+                .then((lastOpen) => {
+                    this.lastOpen = lastOpen;
                 });
         },
 
@@ -69,8 +67,12 @@
                     });
             },
 
-            isNewPost(key) {
-                return this.newPosts.includes(key);
+            isNewPost(post) {
+                if (!this.lastOpen) {
+                    return false;
+                }
+
+                return post.published_at > this.lastOpen;
             }
         },
     }

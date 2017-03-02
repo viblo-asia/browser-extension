@@ -26,11 +26,11 @@
                 <div class="control">
                     <label class="radio">
                         <input type="radio" value="all" v-model="form.badgeTextType">
-                        <strong>Unread Notifications Counter</strong>
+                        <strong>All</strong>
                     </label>
 
                     <label class="radio">
-                        <input :disabled="!this.form.newPostNotification" type="radio" value="post" v-model="form.badgeTextType">
+                        <input :disabled="!this.form.newPostNotification" type="radio" value="newPosts" v-model="form.badgeTextType">
                         <strong>New Posts Counter</strong>
                     </label>
 
@@ -94,7 +94,7 @@
                     authenticated: false,
                     oauthToken: '',
                     options: {
-                        badgeTextType: 'post',
+                        badgeTextType: 'newPosts',
                         newPostNotification: true
                     }
                 };

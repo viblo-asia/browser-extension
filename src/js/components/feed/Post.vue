@@ -10,10 +10,10 @@
 
                 <div class="media-content">
                     <div>
-                        <a :href="postUrl" class="is-6 fw-bold mb-0" v-text="post.title"></a>
+                        <a :href="postUrl" target="__blank" class="is-6 fw-bold mb-0" v-text="post.title"></a>
                     </div>
                     <div>
-                        <a :href="userUrl">
+                        <a :href="userUrl" target="__blank">
                             <small><strong v-text="post.user.name"></strong></small> <small v-text="username"></small>
                         </a>
                         <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ post.published_at | ago }}</small>
@@ -64,7 +64,7 @@
             },
 
             postUrl() {
-                return `${EXTENSION_ROOT_URL}/${this.post.user.username}/posts/${this.post.slug}`;
+                return this.post.url || `${EXTENSION_ROOT_URL}/${this.post.user.username}/posts/${this.post.slug}`;
             },
 
             userUrl() {
