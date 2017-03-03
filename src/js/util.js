@@ -5,7 +5,7 @@ export function getChromeStorage(local = false) {
         return chrome.storage.local;
     }
 
-    return chrome.storage.sync;
+    return chrome.storage.sync || chrome.storage.local;
 }
 
 export default {

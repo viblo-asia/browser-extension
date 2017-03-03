@@ -2,6 +2,7 @@ import api from '../api';
 import moment from 'moment';
 import Counter from './Counter';
 import {localStorage} from '../storage/ChromeStorage';
+import Auth from './Auth';
 
 export const NEW_POSTS = 'newPosts';
 export const UNREAD_NOTIFICATIONS = 'unreadNotifications';
@@ -12,7 +13,7 @@ export default {
     clear(type) {
         Counter.clear(type)
             .then(this.updateLastOpen.bind(this, type))
-            .then(this.sendClearToServer.bind(this, type));
+            .then(Auth.authenticated ? this.sendClearToServer.bind(this, type) : null);
     },
 
     updateLastOpen(type) {

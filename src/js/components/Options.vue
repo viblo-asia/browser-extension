@@ -23,15 +23,22 @@
                     </div>
                 </div>
 
-                <div class="control">
+                <div class="control" v-if="this.authenticated">
+                    <label class="label"><strong>Badge counter type</strong></label>
+
                     <label class="radio">
                         <input type="radio" value="all" v-model="form.badgeTextType">
-                        <strong>All</strong>
+                        <span>All</span>
+                    </label>
+
+                    <label class="radio">
+                        <input type="radio" value="unreadNotifications" v-model="form.badgeTextType">
+                        <span>Unread notifications</span>
                     </label>
 
                     <label class="radio">
                         <input :disabled="!this.form.newPostNotification" type="radio" value="newPosts" v-model="form.badgeTextType">
-                        <strong>New Posts Counter</strong>
+                        <span>New Posts</span>
                     </label>
 
                     <div class="notification small-text mt-05">
@@ -57,9 +64,15 @@
     import {syncedStorage} from '../storage/ChromeStorage';
 
     export default {
+        props: {
+            authenticated: {
+                type: Boolean,
+                default: false
+            }
+        },
+
         data() {
             return {
-                authenticated: false,
                 form: {
                     badgeTextType: 'post',
                     newPostNotification: true
@@ -72,10 +85,6 @@
         },
 
         created() {
-            syncedStorage.find('authenticated', (value) => {
-                this.authenticated = value;
-            });
-
             syncedStorage.find('options', (options) => {
                 if (options) {
                     this.form = Object.assign({}, this.form, options);
