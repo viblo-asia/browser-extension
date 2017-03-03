@@ -34,6 +34,8 @@
 </style>
 
 <script>
+    import Utils from '../../util';
+
     export default {
         props: {
             post: {
@@ -64,11 +66,15 @@
             },
 
             postUrl() {
-                return this.post.url || `${EXTENSION_ROOT_URL}/${this.post.user.username}/posts/${this.post.slug}`;
+                const url = this.post.url || `${EXTENSION_ROOT_URL}/${this.post.user.username}/posts/${this.post.slug}`;
+
+                return Utils.utmUrl(url);
             },
 
             userUrl() {
-                return `${EXTENSION_ROOT_URL}/u/${this.post.user.username}`;
+                const url = `${EXTENSION_ROOT_URL}/u/${this.post.user.username}`;
+
+                return Utils.utmUrl(url);
             }
         }
     }

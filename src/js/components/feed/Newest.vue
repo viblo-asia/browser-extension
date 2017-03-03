@@ -33,6 +33,7 @@
     import api from '../../api';
     import Notifications, {NEW_POSTS} from '../../services/Notifications';
     import {ROOT_URL} from '../../constants';
+    import Utils from '../../util';
 
     export default {
         data() {
@@ -41,7 +42,7 @@
                 posts: [],
                 loading: true,
                 lastOpen: null,
-                rootUrl: ROOT_URL
+                rootUrl: Utils.utmUrl(ROOT_URL)
             };
         },
 

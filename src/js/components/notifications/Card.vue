@@ -21,6 +21,8 @@
 </style>
 
 <script>
+    import Utils from '../../util';
+
     export default {
         props: {
             notification: {
@@ -70,10 +72,8 @@
         mounted() {
             let nodes = this.$el.querySelectorAll('a');
             _.each(nodes, (node) => {
-                node.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.open(node.getAttribute('href'), '_blank');
-                });
+                const url = Utils.utmUrl(node.getAttribute('href'));
+                node.setAttribute('href', url);
             });
         }
     }
