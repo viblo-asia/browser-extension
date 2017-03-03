@@ -36,7 +36,7 @@
                 </tab>
 
                 <tab id="settings" name="Settings" :position="3">
-                    <options></options>
+                    <options :authenticated="authenticated"></options>
                 </tab>
             </tabs>
         </div>
@@ -61,7 +61,8 @@
 </style>
 
 <script>
-    import api from '../api';
+    import EventBus from './EventBus';
+    import Auth from '../services/Auth';
     import Tab from './tabs/Tab.vue';
     import Tabs from './tabs/Tabs.vue';
     import Options from './Options.vue';
@@ -118,13 +119,18 @@
                 this.authenticated = value;
 
                 if (this.authenticated) {
-                    api.getUser().then((user) => this.currentUser = user);
+                    Auth.get().then((user) => this.currentUser = user);
                 }
             });
 
             Counter.get(null, (counters) => {
                 const { newPosts, unreadNotifications } = counters;
                 this.counters = {  newPosts, unreadNotifications  };
+            });
+
+            EventBus.$on('logged-in', (user) => {
+                this.currentUser = user;
+                this.authenticated = true;
             });
         },
     }
