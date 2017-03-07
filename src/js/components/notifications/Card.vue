@@ -21,7 +21,7 @@
 </style>
 
 <script>
-    import Utils from '../../util';
+    import Tab from '../../services/Tab';
 
     export default {
         props: {
@@ -72,8 +72,12 @@
         mounted() {
             let nodes = this.$el.querySelectorAll('a');
             _.each(nodes, (node) => {
-                const url = Utils.utmUrl(node.getAttribute('href'));
-                node.setAttribute('href', url);
+                const url = node.getAttribute('href');
+                node.setAttribute('href', '#');
+                node.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    Tab.create(url);
+                })
             });
         }
     }

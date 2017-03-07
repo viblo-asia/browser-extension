@@ -17,7 +17,7 @@
         </div>
 
         <div v-if="!loading" class="has-text-centered">
-            <a style="margin:5px;padding:15px" class="button is-primary" :href="rootUrl" target="__blank">See More</a>
+            <a style="margin:5px;padding:15px" class="button is-primary" href="#" @click.prevent="newestsPage">See More</a>
         </div>
     </div>
 </template>
@@ -33,7 +33,7 @@
     import api from '../../api';
     import Notifications, {NEW_POSTS} from '../../services/Notifications';
     import {ROOT_URL} from '../../constants';
-    import Utils from '../../util';
+    import Tab from '../../services/Tab';
 
     export default {
         data() {
@@ -41,8 +41,7 @@
                 keys: '',
                 posts: [],
                 loading: true,
-                lastOpen: null,
-                rootUrl: Utils.utmUrl(ROOT_URL)
+                lastOpen: null
             };
         },
 
@@ -74,6 +73,10 @@
                 }
 
                 return post.published_at > this.lastOpen;
+            },
+
+            newestsPage() {
+                Tab.create(ROOT_URL);
             }
         },
     }

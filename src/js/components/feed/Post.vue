@@ -10,10 +10,10 @@
 
                 <div class="media-content">
                     <div>
-                        <a :href="postUrl" target="__blank" class="is-6 fw-bold mb-0" v-text="post.title"></a>
+                        <a @click.prevent="openUrl(postUrl)" href="#" class="is-6 fw-bold mb-0" v-text="post.title"></a>
                     </div>
                     <div>
-                        <a :href="userUrl" target="__blank">
+                        <a @click.prevent="openUrl(userUrl)" href="#">
                             <small><strong v-text="post.user.name"></strong></small> <small v-text="username"></small>
                         </a>
                         <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ post.published_at | ago }}</small>
@@ -34,7 +34,7 @@
 </style>
 
 <script>
-    import Utils from '../../util';
+    import Tab from '../../services/Tab';
 
     export default {
         props: {
@@ -66,15 +66,17 @@
             },
 
             postUrl() {
-                const url = this.post.url || `${EXTENSION_ROOT_URL}/${this.post.user.username}/posts/${this.post.slug}`;
-
-                return Utils.utmUrl(url);
+                return this.post.url || `${EXTENSION_ROOT_URL}/${this.post.user.username}/posts/${this.post.slug}`;
             },
 
             userUrl() {
-                const url = `${EXTENSION_ROOT_URL}/u/${this.post.user.username}`;
+                return `${EXTENSION_ROOT_URL}/u/${this.post.user.username}`;
+            }
+        },
 
-                return Utils.utmUrl(url);
+        methods: {
+            openUrl(url) {
+                Tab.create(url);
             }
         }
     }

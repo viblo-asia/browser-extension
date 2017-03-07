@@ -3,41 +3,26 @@ import * as Constants from './constants';
 
 export default {
     getUser() {
-        return new Promise((resolve) => {
-            axios.get(Constants.API_USER)
-                .then((response) => {
-                    resolve(response.data.data);
-                }, () => {
-                    resolve(null);
-                });
-        });
+        return axios.get(Constants.API_USER)
+            .then((response) => Promise.resolve(response.data.data));
     },
 
     getNewestPosts() {
-        return new Promise((resolve) => {
-            axios.get(Constants.API_FEED_NEWEST)
-                .then((response) => {
-                    resolve(response.data.data.posts);
-                }, () => {
-                    resolve(null);
-                })
-        });
+        return axios.get(Constants.API_FEED_NEWEST)
+            .then((response) => Promise.resolve(response.data.data.posts));
     },
 
     clearNotification(shouldDelete = false) {
         const params = shouldDelete ? {delete: true} : {};
 
-        return new Promise((resolve) => {
-            axios.get(Constants.API_NOTIFICATION_CLEAR, {params}).then(() => resolve(true))
-            .catch(() => resolve(false));
-        });
+        return axios.get(Constants.API_NOTIFICATION_CLEAR, {params})
+            .then(() => Promise.resolve(true))
+            .catch(() => Promise.resolve(false));
     },
 
     updateHomepageVisit() {
-        return new Promise((resolve) => {
-            axios.post(Constants.API_UPDATE_VISIT)
-                .then(() => resolve(true))
-                .catch(() => resolve(false));
-        })
+        return axios.post(Constants.API_UPDATE_VISIT)
+            .then(() => Promise.resolve(true))
+            .catch(() => Promise.resolve(false));
     }
 }

@@ -119,7 +119,10 @@
                 this.authenticated = value;
 
                 if (this.authenticated) {
-                    Auth.get().then((user) => this.currentUser = user);
+                    Auth.get().then((user) => {
+                        this.currentUser = user;
+                        this.readNewPosts();
+                    });
                 }
             });
 

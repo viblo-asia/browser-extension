@@ -1,3 +1,5 @@
+import utils from '../util';
+
 class Tab {
     static create(url) {
         return new Promise((resolve, reject) => {
@@ -5,6 +7,7 @@ class Tab {
                 return reject(chrome.runtime.lastError);
             }
 
+            url = utils.utmUrl(url);
             chrome.tabs.create({url}, resolve);
         });
     }
