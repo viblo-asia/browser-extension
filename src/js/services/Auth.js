@@ -7,39 +7,46 @@ export default {
     user: null,
 
     get() {
-        return new Promise((resolve) => {
-            api.getUser().then((user) => {
-                this.authenticated = user !== null;
-                this.user = user
-                resolve(user);
-            });
-        })
+        return api.getUser().then((user) => {
+            this.authenticated = user !== null;
+            this.user = user;
+
+            return user;
+        });
+    },
+
+    storeToken(token) {
+        const data = {
+            authenticated: true,
+            oauthToken: `Bearer ${token}`,
+            options: {
+                badgeTextType: 'all',
+                newPostNotification: true
+            }
+        };
+
+        syncedStorage.set(data);
     },
 
     login(token) {
-        return new Promise((resolve, reject) => {
-            if (/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/.test(token)) {
-                const oauthToken = `Bearer ${token}`;
+        if (/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/.test(token)) {
+            const oauthToken = `Bearer ${token}`;
 
-                const data = {
-                    authenticated: true,
-                    oauthToken,
-                    options: {
-                        badgeTextType: 'all',
-                        newPostNotification: true
-                    }
-                };
+            axios.defaults.headers.common = {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Authorization': oauthToken
+            };
 
-                axios.defaults.headers.common = {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Authorization': oauthToken
-                };
+            return this.get((user) => {
+                if (user) {
+                    this.storeToken(token);
+                }
 
-                syncedStorage.set(data, resolve);
-            } else {
-                reject();
-            }
-        });
+                return user;
+            });
+        } else {
+            return Promise.reject();
+        }
     }
 }

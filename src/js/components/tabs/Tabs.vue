@@ -52,14 +52,6 @@
             }
         },
 
-        mounted() {
-            this.tabs.forEach(tab => {
-                if (tab.selected) {
-                    tab.$emit('selected');
-                }
-            });
-        },
-
         methods: {
             selectTab(selectedTab) {
                 this.tabs.forEach(tab => {

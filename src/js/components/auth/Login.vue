@@ -67,15 +67,16 @@
             },
 
             login() {
-                if (!this.form.oauthToken || this.state.processing) {
+                const oauthToken = this.form.oauthToken;
+
+                if (!oauthToken || this.state.processing) {
                     return;
                 }
 
                 this.state.processing = true;
 
-                Promise.all([Auth.login(this.form.oauthToken), Auth.get()])
-                    .then((values) => {
-                        const user = values[values.length - 1];
+                Auth.login(oauthToken)
+                    .then((user) => {
                         EventBus.$emit('logged-in', user);
                     }).catch(() => {
                         this.state.logInError = true;
