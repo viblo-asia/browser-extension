@@ -21,6 +21,7 @@
 </style>
 
 <script>
+    import utils from '../../util';
     import Tab from '../../services/Tab';
 
     export default {
@@ -73,7 +74,7 @@
             let nodes = this.$el.querySelectorAll('a');
             _.each(nodes, (node) => {
                 const url = node.getAttribute('href');
-                node.setAttribute('href', '#');
+                node.setAttribute('href', utils.utmUrl(url));
                 node.addEventListener('click', (e) => {
                     e.preventDefault();
                     Tab.create(url);
