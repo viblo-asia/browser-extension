@@ -1,13 +1,16 @@
 import utils from '../util';
 
 class Tab {
-    static create(url) {
+    static create(url, appendUtmParams = true) {
         return new Promise((resolve, reject) => {
             if (chrome.runtime.lastError) {
                 return reject(chrome.runtime.lastError);
             }
 
-            url = utils.utmUrl(url);
+            if (appendUtmParams) {
+                url = utils.utmUrl(url);
+            }
+
             chrome.tabs.create({url}, resolve);
         });
     }

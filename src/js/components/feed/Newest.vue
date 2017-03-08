@@ -17,7 +17,7 @@
         </div>
 
         <div v-if="!loading" class="has-text-centered">
-            <a style="margin:5px;padding:15px" class="button is-primary" href="#" @click.prevent="newestsPage">See More</a>
+            <a style="margin:5px;padding:15px" class="button is-primary" @click.prevent="newestsPage">See More</a>
         </div>
     </div>
 </template>

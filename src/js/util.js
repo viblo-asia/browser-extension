@@ -5,7 +5,12 @@ export function getChromeStorage(local = false) {
         return chrome.storage.local;
     }
 
-    return chrome.storage.sync || chrome.storage.local;
+    if (EXTENSION_TYPE === 'chrome-extension') {
+        return chrome.storage.sync;
+    }
+
+    // TODO: Check for Firefox version that support storage.sync (when there's one available)
+    return chrome.storage.local;
 }
 
 export default {
@@ -18,5 +23,32 @@ export default {
         const firstSeparator = url.indexOf('?') === -1 ? '?' : '&';
 
         return `${url}${firstSeparator}${query}`;
+    },
+
+    postUrl(post, isUserPost = true, systemCategory = 'help') {
+        if (post.url) {
+            return post.url;
+        }
+
+        const category = isUserPost ? _.get(post, 'user.username') : systemCategory;
+
+        if (!category || !post.slug) {
+            throw new Error('Invalid argument');
+        }
+
+        const postUrl = isUserPost ? `${category}/posts/${post.slug}` :
+            `${category}/${post.slug}`;
+
+        return `${EXTENSION_ROOT_URL}/${postUrl}`;
+    },
+
+    userUrl(user) {
+        const username = typeof user === 'string' ? user : _.get(user, 'username');
+
+        if (!username) {
+            throw new Error('Invalid user');
+        }
+
+        return `${EXTENSION_ROOT_URL}/u/${user.username}`;
     }
 }
