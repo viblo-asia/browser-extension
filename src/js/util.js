@@ -5,7 +5,12 @@ export function getChromeStorage(local = false) {
         return chrome.storage.local;
     }
 
-    return chrome.storage.sync || chrome.storage.local;
+    if (EXTENSION_TYPE === 'chrome-extension') {
+        return chrome.storage.sync;
+    }
+
+    // TODO: Check for Firefox version that support storage.sync (when there's one available)
+    return chrome.storage.local;
 }
 
 export default {
