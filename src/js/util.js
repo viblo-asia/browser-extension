@@ -5,7 +5,7 @@ export function getChromeStorage(local = false) {
         return chrome.storage.local;
     }
 
-    if (EXTENSION_TYPE === 'chrome-extension') {
+    if (BROWSER === 'chrome') {
         return chrome.storage.sync;
     }
 
@@ -14,7 +14,11 @@ export function getChromeStorage(local = false) {
 }
 
 export default {
-    utmUrl(url, source = EXTENSION_TYPE, medium = 'extension', name, term, content) {
+    utmUrl(url, source, medium = 'extension', name, term, content) {
+        if (!source && BROWSER) {
+            source = `${BROWSER}-extension`;
+        }
+
         const query = _.chain({ source, medium, name, term, content })
             .map((value, name) => value ? `utm_${name}=${encodeURI(value)}` : null)
             .filter((param) => param !== null)
