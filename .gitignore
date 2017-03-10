@@ -5,4 +5,5 @@ mix-manifest.json
 .env
 .env.*
 !.env.example
+!.env.staging
 npm-debug.log

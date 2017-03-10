@@ -2,10 +2,6 @@ let path = require('path');
 let webpack = require('webpack');
 let Mix = require('laravel-mix').config;
 let plugins = require('laravel-mix').plugins;
-let env = require('./env.loader')({
-    NODE_ENV: process.env.NODE_ENV || 'development'
-});
-
 
 /*
  |--------------------------------------------------------------------------
@@ -289,8 +285,6 @@ module.exports.plugins = (module.exports.plugins || []).concat([
 
     new webpack.IgnorePlugin(/pusher-js/),
 
-    new webpack.DefinePlugin(env),
-
     new webpack.LoaderOptionsPlugin({
         minimize: Mix.inProduction,
         options: {
@@ -391,3 +385,20 @@ if (Mix.inProduction) {
  |
  */
 Mix.finalize(module.exports);
+
+const config = module.exports;
+
+module.exports = (envOptions) => {
+    const envfile = envOptions && envOptions.envfile ? envOptions.envfile : '.env';
+    const env = require('./env.loader')(envfile);
+
+    if (envOptions && envOptions.browser) {
+        env.BROWSER = JSON.stringify(envOptions.browser);
+    } else if (!env.BROWSER) {
+        env.BROWSER = JSON.stringify('chrome');
+    }
+
+    config.plugins = [...config.plugins, new webpack.DefinePlugin(env)];
+
+    return config;
+};
