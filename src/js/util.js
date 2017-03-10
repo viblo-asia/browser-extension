@@ -16,7 +16,7 @@ export function getChromeStorage(local = false) {
 export default {
     utmUrl(url, source, medium = 'extension', name, term, content) {
         if (!source && BROWSER) {
-            source = `${BROWSER}-extension`;
+            source = `${BROWSER}_extension`;
         }
 
         const query = _.chain({ source, medium, name, term, content })

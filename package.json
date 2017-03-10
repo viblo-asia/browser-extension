@@ -4,11 +4,11 @@
     "test": "eslint src/js",
     "dev": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=./webpack.config.js",
     "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=./webpack.config.js",
-    "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=./webpack.config.js",
-    "chrome": "npm run production -- --env.browser=chrome",
-    "firefox": "npm run production -- --env.browser=firefox",
-    "chrome-staging": "npm run production -- --env.browser=chrome --env.envfile=.env.staging",
-    "firefox-staging": "npm run production -- --env.browser=firefox --env.envfile=.env.staging"
+    "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node ./build.js",
+    "chrome": "npm run production -- --browser=chrome",
+    "firefox": "npm run production -- --browser=firefox",
+    "chrome-staging": "npm run production -- --browser=chrome --envfile=staging",
+    "firefox-staging": "npm run production -- --browser=firefox --envfile=staging"
   },
   "devDependencies": {
     "axios": "^0.15.3",
@@ -22,6 +22,8 @@
     "moment": "^2.17.1",
     "socket.io-client": "^1.7.2",
     "vue": "^2.1.10",
-    "vue-infinite-loading": "^2.0.0"
+    "vue-infinite-loading": "^2.0.0",
+    "webpack": "^2.2.1",
+    "yargs": "^7.0.1"
   }
 }
