@@ -7,3 +7,4 @@ export const API_FEED_NEWEST = `${EXTENSION_ROOT_URL}/api/feed/newest`;
 export const API_NOTIFICATIONS = `${EXTENSION_ROOT_URL}/api/notifications`;
 export const API_NOTIFICATION_CLEAR = `${EXTENSION_ROOT_URL}/api/notifications/clear`;
 export const API_UPDATE_VISIT = `${EXTENSION_ROOT_URL}/api/updateVisit`;
+export const API_POST_SEARCH = `${ROOT_URL}/api/search`;

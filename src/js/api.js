@@ -24,5 +24,11 @@ export default {
         return axios.post(Constants.API_UPDATE_VISIT)
             .then(() => Promise.resolve(true))
             .catch(() => Promise.resolve(false));
+    },
+
+    searchPost(query) {
+        return axios.get(`${Constants.API_POST_SEARCH}/?q=${query}`)
+            .then((response) => Promise.resolve(response.data))
+            .catch(() => Promise.reject());
     }
 }
