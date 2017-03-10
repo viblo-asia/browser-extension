@@ -16,9 +16,20 @@ const config = require('./webpack.config')({
     browser: argv.browser
 });
 
-const writeManifest = (version) => {
+const writeManifest = (version, browser) => {
     const manifest = require('./manifest.example.json');
     const manifestFile = path.resolve(__dirname, './build/manifest.json');
+
+    if (browser === 'firefox') {
+        manifest.applications = {
+            gecko: {
+                id: 'extension@viblo.asia',
+                strict_min_version: '52.0a1'
+            }
+        };
+    } else if (manifest.applications) {
+        delete manifest.applications;
+    }
 
     if (version) {
         manifest.version = version;
@@ -47,7 +58,7 @@ compiler.run((err) => {
         return;
     }
 
-    writeManifest(argv.version);
+    writeManifest(argv.version, argv.browser);
     createArchive(argv.browser);
 });
 

@@ -6,6 +6,7 @@ import Notifier from '../services/Notifier';
 import {initStorages, syncedStorage} from '../storage/ChromeStorage'
 import Auth from '../services/Auth';
 import Settings from '../services/Settings';
+import quickSearch from './quickSearch';
 
 window.io = io;
 initStorages().then(() => chrome.runtime.reload());
@@ -14,6 +15,8 @@ Counter.setBadgeTextContent();
 chrome.notifications.onClicked.addListener((notificationId) => {
     Notifier.open(notificationId);
 });
+
+quickSearch.init();
 
 syncedStorage.find('oauthToken', (oauthToken) => {
     let options = {

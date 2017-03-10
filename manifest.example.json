@@ -17,6 +17,9 @@
         "notifications",
         "<all_urls>"
     ],
+    "omnibox": {
+        "keyword": "viblo"
+    },
     "icons": {
         "64": "images/icon64.png"
     },
