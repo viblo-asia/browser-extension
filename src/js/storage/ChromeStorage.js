@@ -44,7 +44,7 @@ export function initStorages() {
             if (_.isUndefined(options)) {
                 syncedStorage.set({
                     options: {
-                        badgeTextType: 'post',
+                        badgeTextType: 'newPosts',
                         newPostNotification: true
                     }
                 }, () => resolve());

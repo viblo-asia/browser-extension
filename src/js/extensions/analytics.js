@@ -1,13 +1,12 @@
 let _AnalyticsCode = EXTENSION_GOOGLE_ANALYTICS_ID;
-let _gaq = _gaq || [];
-_gaq.push(['_setAccount', _AnalyticsCode]);
-_gaq.push(['_trackPageview']);
 
-(function() {
-    let ga = document.createElement('script');
-    ga.type = 'text/javascript';
-    ga.async = true;
-    ga.src = 'https://ssl.google-analytics.com/ga.js';
-    let s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
-})();
+// Standard Google Universal Analytics code
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://ssl.google-analytics.com/analytics.js','ga');
+
+window.ga('create', _AnalyticsCode, 'auto');
+window.ga('set', 'checkProtocolTask', function(){});
+window.ga('require', 'displayfeatures');
+window.ga('send', 'pageview', '/options.html');

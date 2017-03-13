@@ -39,7 +39,7 @@ export default {
                 callback(null);
             }
 
-            const value = type ? counters[type] : counters;
+            const value = type && type !== 'all' ? counters[type] : counters;
             callback(value);
         });
     },
@@ -50,18 +50,12 @@ export default {
 
     setBadgeTextContent() {
         Settings.get('badgeTextType', (type) => {
-            if (type) {
-                if (type === 'all') {
-                    type = null;
-                }
+            this.get(type, (value) => {
+                const count = type !== 'all' ? value || 0 : _.sum(_.values(value));
 
-                this.get(type, (value) => {
-                    const count = type ? value || 0 : _.sum(_.values(value));
-
-                    let badge = new Badge(count);
-                    badge.render();
-                })
-            }
+                let badge = new Badge(count);
+                badge.render();
+            })
         });
     }
 }

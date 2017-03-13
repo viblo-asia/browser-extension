@@ -77,6 +77,7 @@
 
                 Auth.login(oauthToken)
                     .then((user) => {
+                        chrome.runtime.reload();
                         EventBus.$emit('logged-in', user);
                     }).catch(() => {
                         this.state.logInError = true;
