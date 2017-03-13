@@ -18,7 +18,7 @@ chrome.notifications.onClicked.addListener((notificationId) => {
 
 quickSearch.init();
 
-syncedStorage.find('oauthToken', (oauthToken) => {
+Auth.getToken((oauthToken) => {
     let options = {
         host: EXTENSION_ECHO_URL,
         broadcaster: 'socket.io',

@@ -15,6 +15,10 @@ export default {
         });
     },
 
+    getToken(callback) {
+        syncedStorage.find('oauthToken', callback);
+    },
+
     storeToken(token) {
         const data = {
             authenticated: true,
@@ -25,7 +29,9 @@ export default {
             }
         };
 
-        syncedStorage.set(data);
+        return new Promise((resolve) => {
+            syncedStorage.set(data, resolve);
+        });
     },
 
     login(token) {
@@ -38,15 +44,10 @@ export default {
                 'Authorization': oauthToken
             };
 
-            return this.get((user) => {
-                if (user) {
-                    this.storeToken(token);
-                }
-
-                return user;
-            });
-        } else {
-            return Promise.reject();
+            return this.get()
+                .then((user) => user ? this.storeToken(token) : Promise.reject());
         }
+
+        return Promise.reject();
     }
 }

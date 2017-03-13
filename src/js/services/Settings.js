@@ -11,7 +11,7 @@ export default {
         syncedStorage.find(OPTIONS_STORAGE_KEY, (options) => {
             if (options === undefined) {
                 options = {
-                    badgeTextType: 'post',
+                    badgeTextType: 'newPosts',
                     newPostNotification: true
                 }
             }

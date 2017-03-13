@@ -33,7 +33,7 @@
 
                     <label class="radio">
                         <input type="radio" value="unreadNotifications" v-model="form.badgeTextType">
-                        <span>Unread notifications</span>
+                        <span>Unread Notifications</span>
                     </label>
 
                     <label class="radio">
@@ -74,7 +74,7 @@
         data() {
             return {
                 form: {
-                    badgeTextType: 'post',
+                    badgeTextType: 'newPosts',
                     newPostNotification: true
                 }
             };

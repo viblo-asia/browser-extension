@@ -115,13 +115,14 @@
         },
 
         created() {
+            this.readNewPosts();
+
             syncedStorage.find('authenticated', (value) => {
                 this.authenticated = value;
 
                 if (this.authenticated) {
                     Auth.get().then((user) => {
                         this.currentUser = user;
-                        this.readNewPosts();
                     });
                 }
             });
