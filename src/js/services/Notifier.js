@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Tab from '../services/Tab';
-import Counter, {NEW_POSTS, UNREAD_NOTIFICATIONS} from '../services/Counter';
-import {ROOT_URL} from '../constants';
+import Counter from '../services/Counter';
+import {ROOT_URL, NEW_POSTS, UNREAD_NOTIFICATIONS} from '../constants';
 
 const NotificationStore = {
     items: [],

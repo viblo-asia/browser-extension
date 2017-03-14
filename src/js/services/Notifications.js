@@ -3,9 +3,7 @@ import moment from 'moment';
 import Counter from './Counter';
 import {localStorage} from '../storage/ChromeStorage';
 import Auth from './Auth';
-
-export const NEW_POSTS = 'newPosts';
-export const UNREAD_NOTIFICATIONS = 'unreadNotifications';
+import {NEW_POSTS, UNREAD_NOTIFICATIONS} from '../constants';
 
 const LAST_OPEN_STORAGE_KEY = 'lastOpen';
 

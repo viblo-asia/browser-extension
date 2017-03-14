@@ -18,8 +18,8 @@
 <script>
     import NotificationCard from './Card.vue';
     import InfiniteLoading from 'vue-infinite-loading';
-    import {API_NOTIFICATIONS} from '../../constants';
-    import Notifications, {UNREAD_NOTIFICATIONS} from '../../services/Notifications';
+    import Notifications from '../../services/Notifications';
+    import {API_NOTIFICATIONS, UNREAD_NOTIFICATIONS} from '../../constants';
 
     export default {
         components: {

@@ -62,15 +62,17 @@
 
 <script>
     import EventBus from './EventBus';
-    import Auth from '../services/Auth';
     import Tab from './tabs/Tab.vue';
     import Tabs from './tabs/Tabs.vue';
     import Options from './Options.vue';
     import FeedNewest from './feed/Newest.vue';
     import Notifications from './notifications/List.vue';
-    import {syncedStorage} from '../storage/ChromeStorage';
+
+    import Auth from '../services/Auth';
     import Counter from '../services/Counter';
-    import NotificationsService, {NEW_POSTS, UNREAD_NOTIFICATIONS} from '../services/Notifications';
+    import {syncedStorage} from '../storage/ChromeStorage';
+    import NotificationsService from '../services/Notifications';
+    import {NEW_POSTS, UNREAD_NOTIFICATIONS} from '../constants.js';
 
     export default {
         data() {

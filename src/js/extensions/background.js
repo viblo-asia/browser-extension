@@ -1,16 +1,18 @@
+import api from '../api';
 import axios from 'axios';
 import Echo from 'laravel-echo';
 import * as io from 'socket.io-client';
-import Counter from '../services/Counter';
-import Notifier from '../services/Notifier';
-import {initStorages, syncedStorage} from '../storage/ChromeStorage'
 import Auth from '../services/Auth';
-import Settings from '../services/Settings';
 import quickSearch from './quickSearch';
+import * as Constants from '../constants';
+import Counter from '../services/Counter';
+import Settings from '../services/Settings';
+import Notifier from '../services/Notifier';
+import Notifications from '../services/Notifications';
+import { initStorages } from '../storage/ChromeStorage'
 
 window.io = io;
 initStorages().then(() => chrome.runtime.reload());
-Counter.setBadgeTextContent();
 
 chrome.notifications.onClicked.addListener((notificationId) => {
     Notifier.open(notificationId);
@@ -20,7 +22,7 @@ quickSearch.init();
 
 Auth.getToken((oauthToken) => {
     let options = {
-        host: EXTENSION_ECHO_URL,
+        host: Constants.ECHO_URL,
         broadcaster: 'socket.io',
         namespace: 'Framgia.Viblo.Events',
         reconnectionAttempts: 2,
@@ -46,6 +48,7 @@ Auth.getToken((oauthToken) => {
     let echo = new Echo(options);
 
     listen(echo, oauthToken ? true : false);
+    updateBadgeCounters(oauthToken ? true : false);
 });
 
 const listen = (echo, authenticated) => {
@@ -70,4 +73,18 @@ const listen = (echo, authenticated) => {
                 });
         }
     });
+}
+
+const updateBadgeCounters = (authenticated) => {
+    Promise.all([Notifications.getLastOpen(Constants.NEW_POSTS), api.getNewestPosts()])
+        .then(([lastOpen, posts]) => {
+            const newPostsCount = posts.filter((post) => post.published_at > lastOpen).length;
+
+            Counter.set(Constants.NEW_POSTS, newPostsCount);
+        });
+
+    if (authenticated) {
+        api.getNotifications()
+            .then((notifications) => Counter.set(Constants.UNREAD_NOTIFICATIONS, notifications.counter));
+    }
 }

@@ -31,8 +31,8 @@
     import Post from './Post';
     import InfiniteLoading from 'vue-infinite-loading';
     import api from '../../api';
-    import Notifications, {NEW_POSTS} from '../../services/Notifications';
-    import {ROOT_URL} from '../../constants';
+    import Notifications from '../../services/Notifications';
+    import {ROOT_URL, NEW_POSTS} from '../../constants';
     import Tab from '../../services/Tab';
 
     export default {
