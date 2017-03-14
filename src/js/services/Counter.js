@@ -5,9 +5,6 @@ import Settings from './Settings';
 
 const COUNTERS_STORAGE_KEY = 'counters';
 
-export const NEW_POSTS = 'newPosts';
-export const UNREAD_NOTIFICATIONS = 'unreadNotifications';
-
 export default {
     increment(type) {
         this.get(type, (value) => {

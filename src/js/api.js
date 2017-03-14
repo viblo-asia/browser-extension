@@ -12,6 +12,14 @@ export default {
             .then((response) => Promise.resolve(response.data.data.posts));
     },
 
+    getNotifications() {
+        return axios.get(Constants.API_NOTIFICATIONS)
+            .then((response) => Promise.resolve({
+                counter: response.data.data.counter,
+                items: response.data.data.paginator.data
+            }));
+    },
+
     clearNotification(shouldDelete = false) {
         const params = shouldDelete ? {delete: true} : {};
 
