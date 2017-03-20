@@ -5,7 +5,7 @@
     "manifest_version": 2,
     "description": "Getting latest Posts and Notifications from Viblo",
     "content_scripts": [],
-    "web_accessible_resources": [],
+    "web_accessible_resources": ["images/logo.png"],
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "browser_action": {
         "default_icon": "images/icon64.png",

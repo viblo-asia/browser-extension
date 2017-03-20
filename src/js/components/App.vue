@@ -5,7 +5,7 @@
                 <div class="hero-body">
                     <div class="container">
                         <div>
-                            <h2 class="title">VIBLO</h2>
+                            <img class="logo" :src="logo"/>
                             <h3 class="subtitle">Free service for technical knowledge sharing.</h3>
                         </div>
 
@@ -43,7 +43,10 @@
     </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
+    .logo
+        width: 75px
+
     .navigation > .tabs:not(:last-child)
         margin-bottom: .8em
 
@@ -77,6 +80,7 @@
     export default {
         data() {
             return {
+                logo: chrome.runtime.getURL('images/logo.png'),
                 currentUser: null,
                 authenticated: false,
                 counters: {
