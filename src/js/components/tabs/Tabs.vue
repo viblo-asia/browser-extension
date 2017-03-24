@@ -24,13 +24,13 @@
             padding: 0 5px
             font-size: 0.9rem
             font-weight: bold
-            background-color: #f25f43
+            background-color: #5488c7
             color: #FFF
 
         &.is-active
             .tab-badge
                 background-color: #FFF
-                color: #f25f43
+                color: #5488c7
 
 </style>
 
