@@ -5,7 +5,10 @@
                 <div class="hero-body">
                     <div class="container">
                         <div>
-                            <img class="logo" :src="logo"/>
+                            <div class="title">
+                                <img class="logo" :src="logo"/>
+                                <span>iblo's News Feed</span>
+                            </div>
                             <h3 class="subtitle">Free service for technical knowledge sharing.</h3>
                         </div>
 
@@ -40,12 +43,24 @@
                 </tab>
             </tabs>
         </div>
+
+        <div class="footer">
+            <a class="rate" @click="storePage"><span>If you like Viblo's News Feed, please </span><span class="color-primary hoverable">rate us!</span></a>
+        </div>
     </div>
 </template>
 
 <style lang="sass" scoped>
-    .logo
-        width: 75px
+    .title
+        display: flex
+
+        .logo
+            height: 25px
+
+        span
+            font-size: 1.5rem
+            line-height: 25px
+            color: #6b717b
 
     .navigation > .tabs:not(:last-child)
         margin-bottom: .8em
@@ -61,6 +76,14 @@
 
             .avatar > img
                 border: 2px solid #4bcd9f
+
+    .footer
+        padding: 5px
+        text-align: center
+
+        .rate
+            font-size: 0.9rem
+            color: #888
 </style>
 
 <script>
@@ -73,14 +96,15 @@
 
     import Auth from '../services/Auth';
     import Counter from '../services/Counter';
+    import BrowserTab from '../services/Tab';
     import {syncedStorage} from '../storage/ChromeStorage';
     import NotificationsService from '../services/Notifications';
-    import {NEW_POSTS, UNREAD_NOTIFICATIONS} from '../constants.js';
+    import {NEW_POSTS, UNREAD_NOTIFICATIONS, STORE_PAGE} from '../constants.js';
 
     export default {
         data() {
             return {
-                logo: chrome.runtime.getURL('images/logo.png'),
+                logo: chrome.runtime.getURL('images/icon64.png'),
                 currentUser: null,
                 authenticated: false,
                 counters: {
@@ -117,6 +141,10 @@
                 if (this.counters.hasOwnProperty(type)) {
                     this.counters[type] = 0;
                 }
+            },
+
+            storePage() {
+                BrowserTab.create(STORE_PAGE);
             }
         },
 

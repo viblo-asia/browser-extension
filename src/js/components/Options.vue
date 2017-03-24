@@ -2,7 +2,7 @@
     <div>
         <login v-if="!authenticated"></login>
 
-        <section class="section pt-0" v-if="authenticated">
+        <section class="mb-05" v-if="authenticated">
             <button @click="logout" class="button is-danger">Logout</button>
             <div class="notification is-warning small-text mt-05">
                 After logging out, you will no longer receive your notifications related to your account on Viblo.
@@ -10,7 +10,7 @@
             </div>
         </section>
 
-        <section class="section pb-0">
+        <section class="mt-05">
             <form @submit.prevent="onSubmit">
                 <div class="control">
                     <label class="checkbox">
