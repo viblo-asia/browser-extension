@@ -23,7 +23,6 @@ const writeManifest = (version, browser) => {
     if (browser === 'firefox') {
         manifest.applications = {
             gecko: {
-                id: 'extension@viblo.asia',
                 strict_min_version: '52.0a1'
             }
         };
