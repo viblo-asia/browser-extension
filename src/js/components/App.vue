@@ -14,7 +14,7 @@
 
                         <div v-if="currentUser">
                             <a :href="userUrl" class="avatar" target="_blank" :title="currentUser.name">
-                                <img :src="currentUser.avatar" :alt="currentUser.name" />
+                                <img :src="currentUser.avatar[1]" :alt="currentUser.name" />
                             </a>
                         </div>
                     </div>

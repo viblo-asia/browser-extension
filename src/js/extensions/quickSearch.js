@@ -3,20 +3,15 @@ import {ROOT_URL} from '../constants';
 import api from '../api';
 import _ from 'lodash';
 
-const createSuggestionsFromResponse = (posts) => {
-    const suggestions = posts.map((post) => ({
-        content: post.url,
-        description: post.title
-    }));
-
-    return Promise.resolve(suggestions);
-};
+const createSuggestionsFromResponse = (posts) => posts.map((post) => ({
+    content: post.url,
+    description: post.title
+}));
 
 const search = _.debounce((query, addSuggestion) => {
     api.searchPost(query)
         .then(createSuggestionsFromResponse)
-        .then(addSuggestion)
-        .catch();
+        .then(addSuggestion);
 }, 300);
 
 export default({
