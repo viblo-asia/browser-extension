@@ -11,7 +11,7 @@ export const ROOT_URL = EXTENSION_ROOT_URL;
 export const API_URL = EXTENSION_API_URL
 export const ECHO_URL = EXTENSION_ECHO_URL;
 
-export const API_USER = `${API_URL}/api/user`;
+export const API_USER = `${API_URL}/user`;
 export const API_FEED_NEWEST = `${API_URL}/api/feed/newest`;
 export const API_NOTIFICATIONS = `${API_URL}/api/notifications`;
 export const API_NOTIFICATION_CLEAR = `${API_URL}/api/notifications/clear`;
