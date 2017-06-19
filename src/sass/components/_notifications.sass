@@ -8,25 +8,41 @@
         padding: .5rem
         white-space: normal
         align-items: center
-        justify-content: space-between
         border-bottom: 1px solid $base-border-color
-        background-color: lighten($gray-lighter, 10%)
+        cursor: pointer
 
-        &.read
-            background-color: lighten($gray-lighter, 7%)
+        background-color: #fff
 
         &:hover
-            background-color: #FFF
+            background-color: #f1f4f6
 
-        .avatar
-            margin-right: 1rem
+        &.new
+            background-color: #dbe3e8
+
+            &:hover
+                background-color: #e4eaee
+
+        .avt-ctn
+            min-width: 3.75rem
+            margin: .5rem
+            margin-right: 0.7rem
 
         .notification-message
-            margin-right: auto
+            display: block
+            width: 100%
+            padding: .5rem
+            padding-left: 0
+            color: black
             font-size: $font-size-base
+
+            &:hover
+                color: black
 
             a
                 font-weight: bold
+
+            b
+                color: $primary
 
             &.no-sender
                 padding-left: 3.8rem

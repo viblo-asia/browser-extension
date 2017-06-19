@@ -35,19 +35,15 @@ export default {
     },
 
     login(token) {
-        if (/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/.test(token)) {
-            const oauthToken = `Bearer ${token}`;
+        const oauthToken = `Bearer ${token}`;
 
-            axios.defaults.headers.common = {
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'Authorization': oauthToken
-            };
+        axios.defaults.headers.common = {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Authorization': oauthToken
+        };
 
-            return this.get()
-                .then((user) => user ? this.storeToken(token) : Promise.reject());
-        }
-
-        return Promise.reject();
+        return this.get()
+            .then((user) => user ? this.storeToken(token) : Promise.reject());
     }
 }

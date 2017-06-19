@@ -1,28 +1,34 @@
 <template>
-    <li :class="wrapperClass">
-        <a :href="getSenderProfile()" v-if="hasSender()" class="avatar is-md-avatar" target="_blank">
-            <img :src="notification.sender.avatar" :alt="notification.sender.name">
-        </a>
-        <span :class="['notification-message', hasSender() ? '' : 'no-sender']">
-            <span v-html="notification.message"></span>
+    <div class="notification-item" :class="{ 'new': !notification.is_read }">
+        <div class="avt-ctn">
+            <a v-if="hasSender()" class="avatar" @click.prevent="toSender">
+                <img :src="notification.sender.data.avatar[1]" :alt="notification.sender.data.name"></img>
+            </a>
+        </div>
+
+        <!-- Legacy notification only -->
+        <div v-if="notification.data.message" class="notification-message">
+            <span class="mb-0" v-html="message(notification)"></span>
             <br/>
-            <small class="notification-time" v-text="notification.time"></small>
-        </span>
-    </li>
+            <small>{{ notification.created_at | humanize-time }}</small>
+        </div>
+
+        <a v-else class="notification-message" @click.prevent="toMessage">
+            <div>
+                <span class="mb-0" v-html="message(notification)"></span>
+                <br/>
+                <small>{{ notification.created_at | humanize-time }}</small>
+            </div>
+        </a>
+    </div>
 </template>
-
-<style lang="sass">
-    .notification-item
-        &.unread
-            background-color: rgba(75, 205, 159, .15)
-
-            &:hover
-                background-color: rgba(75, 205, 159, .35)
-</style>
 
 <script>
     import utils from '../../util';
     import Tab from '../../services/Tab';
+    import _flow from 'lodash/fp/flow'
+    import { message, url } from './messages'
+    import humanizeTime from '../../filters/humanizeTime'
 
     export default {
         props: {
@@ -32,54 +38,26 @@
             }
         },
 
-        methods: {
-            isUnread() {
-                let readAt = this.notification.read_at;
+        filters: {
+            humanizeTime
+        },
 
-                return _.isNull(readAt) || _.isUndefined(readAt);
+        methods: {
+            message,
+            toMessage() {
+                const href = _flow(url, utils.utmUrl)(this.notification)
+                console.log(href)
+                Tab.create(href)
+            },
+
+            toSender() {
+                const url = utils.userUrl(this.notification.sender.data)
+                Tab.create(url)
             },
 
             hasSender() {
                 return !_.isEmpty(this.notification.sender);
-            },
-
-            getSenderProfile() {
-                return this.linkToUser(this.notification.sender);
-            },
-
-            linkToUser(user) {
-                if (user.url) {
-                    return user.url;
-                }
-
-                if (!user || !user.hasOwnProperty('username')) {
-                    throw new Error('Invalid user provided');
-                }
-
-                return `${EXTENSION_ROOT_URL}/u/${user.username}`;
             }
-        },
-
-        computed: {
-            wrapperClass: function() {
-                return {
-                    'read': !this.isUnread(),
-                    'notification-item': true,
-                    'unread': this.isUnread()
-                };
-            }
-        },
-
-        mounted() {
-            let nodes = this.$el.querySelectorAll('a');
-            _.each(nodes, (node) => {
-                const url = node.getAttribute('href');
-                node.setAttribute('href', utils.utmUrl(url));
-                node.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    Tab.create(url);
-                })
-            });
         }
     }
 </script>

@@ -16,7 +16,7 @@
                         <a @click.prevent="openUrl(userUrl)" :href="utmUrl(userUrl)">
                             <small><strong v-text="post.user.name"></strong></small> <small v-text="username"></small>
                         </a>
-                        <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ post.published_at | ago }}</small>
+                        <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ post.published_at | humanize-time }}</small>
                     </div>
                 </div>
             </div>
@@ -36,6 +36,7 @@
 <script>
     import utils from '../../util';
     import Tab from '../../services/Tab';
+    import humanizeTime from '../../filters/humanizeTime'
 
     export default {
         props: {
@@ -58,14 +59,7 @@
         },
 
         filters: {
-            ago(time) {
-                time = moment(time);
-                if (moment().diff(time, 'days') > 3) {
-                    return time.format("MMMM D YYYY [at] h:mma");
-                }
-
-                return time.fromNow();
-            }
+            humanizeTime
         },
 
         computed: {
