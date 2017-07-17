@@ -3,19 +3,18 @@
         <div class="card-content">
             <div class="media">
                 <div class="media-left">
-                    <figure class="image avatar is-md-avatar">
-                        <img :src="post.user.avatar">
-                    </figure>
+                    <Avatar class-name="is-md-avatar" :username="user.username" :images="user.avatar"/>
                 </div>
 
                 <div class="media-content">
+                    <ext-link :to="toPost(post)" :utm="true" class-name="is-6 fw-bold mb-0">
+                        {{ post.title }}
+                    </ext-link>
                     <div>
-                        <a @click.prevent="openUrl(postUrl)" :href="utmUrl(postUrl)" class="is-6 fw-bold mb-0" v-text="post.title"></a>
-                    </div>
-                    <div>
-                        <a @click.prevent="openUrl(userUrl)" :href="utmUrl(userUrl)">
-                            <small><strong v-text="post.user.name"></strong></small> <small v-text="username"></small>
-                        </a>
+                        <ext-link :to="toUser(user)" :utm="true">
+                            <small><strong v-text="user.name"></strong></small>
+                            <small>@{{ user.username }}</small>
+                        </ext-link>
                         <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ post.published_at | humanize-time }}</small>
                     </div>
                 </div>
@@ -35,7 +34,7 @@
 
 <script>
     import utils from '../../util';
-    import Tab from '../../services/Tab';
+    import Avatar from '../commons/Avatar.vue';
     import humanizeTime from '../../filters/humanizeTime'
 
     export default {
@@ -51,11 +50,8 @@
             }
         },
 
-        data() {
-            return {
-                postUrl: utils.postUrl(this.post),
-                userUrl: utils.userUrl(this.post.user)
-            }
+        components: {
+            Avatar
         },
 
         filters: {
@@ -63,19 +59,14 @@
         },
 
         computed: {
-            username() {
-                return '@' + this.post.user.username;
+            user () {
+                return this.post.user.data;
             }
         },
 
         methods: {
-            utmUrl(url) {
-                return utils.utmUrl(url)
-            },
-
-            openUrl(url) {
-                Tab.create(url);
-            }
+            toPost: utils.postUrl,
+            toUser: utils.userUrl
         }
     }
 </script>

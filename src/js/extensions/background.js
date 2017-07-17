@@ -67,7 +67,6 @@ const listen = (echo, authenticated) => {
         });
 
         if (user) {
-            console.log(`Framgia.Viblo.Models.User.${user.id}`)
             echo.private(`Framgia.Viblo.Models.User.${user.id}`)
                 .notification((notification) => {
                     Notifier.sendNotification(notification);

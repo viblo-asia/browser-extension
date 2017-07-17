@@ -27,24 +27,24 @@
         data() {
             return {
                 notifications: [],
-                next: 1
+                nextPage: 1
             };
         },
 
         methods: {
             getNotifications() {
-                api.getNotifications(this.next)
+                api.getNotifications(this.nextPage)
                     .then((data) => {
                         const notifications = data.notifications;
 
                         this.notifications = [...this.notifications, ...notifications.data];
 
                         const pagination = notifications.meta.pagination;
-                        const next = pagination.current_page < pagination.total_pages
+                        const nextPage = pagination.current_page < pagination.total_pages
                             ? pagination.current_page + 1
                             : null;
-                        this.nextPageUrl = next;
-                        this.$refs.loader.$emit(next ? '$InfiniteLoading:loaded' : '$InfiniteLoading:complete');
+                        this.nextPage = nextPage;
+                        this.$refs.loader.$emit(nextPage ? '$InfiniteLoading:loaded' : '$InfiniteLoading:complete');
                     })
             }
         },

@@ -12,11 +12,7 @@
                             <h3 class="subtitle">Free service for technical knowledge sharing.</h3>
                         </div>
 
-                        <div v-if="currentUser">
-                            <a :href="userUrl" class="avatar" target="_blank" :title="currentUser.name">
-                                <img :src="currentUser.avatar[1]" :alt="currentUser.name" />
-                            </a>
-                        </div>
+                        <Avatar v-if="currentUser" :username="currentUser.username" :images="currentUser.avatar"/>
                     </div>
                 </div>
             </div>
@@ -50,47 +46,12 @@
     </div>
 </template>
 
-<style lang="sass" scoped>
-    .title
-        display: flex
-
-        .logo
-            height: 25px
-
-        span
-            font-size: 1.5rem
-            line-height: 25px
-            color: #6b717b
-
-    .navigation > .tabs:not(:last-child)
-        margin-bottom: .8em
-
-    .hero-body
-        padding: 1em
-        padding-bottom: 0
-
-        .container
-            display: flex
-            align-items: center
-            justify-content: space-between
-
-            .avatar > img
-                border: 2px solid #4bcd9f
-
-    .footer
-        padding: 5px
-        text-align: center
-
-        .rate
-            font-size: 0.9rem
-            color: #888
-</style>
-
 <script>
     import EventBus from './EventBus';
     import Tab from './tabs/Tab.vue';
     import Tabs from './tabs/Tabs.vue';
     import Options from './Options.vue';
+    import Avatar from './commons/Avatar.vue'
     import FeedNewest from './feed/Newest.vue';
     import Notifications from './notifications/List.vue';
 
@@ -117,6 +78,7 @@
         components: {
             Tab,
             Tabs,
+            Avatar,
             Options,
             FeedNewest,
             Notifications
@@ -173,3 +135,39 @@
         },
     }
 </script>
+
+<style lang="sass" scoped>
+    .title
+        display: flex
+
+        .logo
+            height: 25px
+
+        span
+            font-size: 1.5rem
+            line-height: 25px
+            color: #6b717b
+
+    .navigation > .tabs:not(:last-child)
+        margin-bottom: .8em
+
+    .hero-body
+        padding: 1em
+        padding-bottom: 0
+
+        .container
+            display: flex
+            align-items: center
+            justify-content: space-between
+
+            .avatar > img
+                border: 2px solid #4bcd9f
+
+    .footer
+        padding: 5px
+        text-align: center
+
+        .rate
+            font-size: 0.9rem
+            color: #888
+</style>
