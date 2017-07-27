@@ -9,7 +9,7 @@ export default {
 
     getNewestPosts() {
         return axios.get(Constants.API_FEED_NEWEST)
-            .then((response) => response.data.data.posts);
+            .then((response) => response.data.posts);
     },
 
     getNotifications(page) {

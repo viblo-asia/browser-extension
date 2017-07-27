@@ -1,34 +1,31 @@
 <template>
     <div class="notification-item" :class="{ 'new': !notification.is_read }">
         <div class="avt-ctn">
-            <a v-if="hasSender()" class="avatar" @click.prevent="toSender">
-                <img :src="notification.sender.data.avatar[1]" :alt="notification.sender.data.name"></img>
-            </a>
+            <Avatar v-if="sender !== null" :username="sender.username" :images="sender.avatar" class-name="is-md-avatar"/>
         </div>
 
         <!-- Legacy notification only -->
         <div v-if="notification.data.message" class="notification-message">
-            <span class="mb-0" v-html="message(notification)"></span>
+            <span class="mb-0" v-html="message.html"></span>
             <br/>
             <small>{{ notification.created_at | humanize-time }}</small>
         </div>
 
-        <a v-else class="notification-message" @click.prevent="toMessage">
+        <ext-link v-else :to="message.url" class-name="notification-message">
             <div>
-                <span class="mb-0" v-html="message(notification)"></span>
+                <span class="mb-0" v-html="message.html"></span>
                 <br/>
                 <small>{{ notification.created_at | humanize-time }}</small>
             </div>
-        </a>
+        </ext-link>
     </div>
 </template>
 
 <script>
-    import utils from '../../util';
-    import Tab from '../../services/Tab';
-    import _flow from 'lodash/fp/flow'
+    import _get from 'lodash/get'
     import { message, url } from './messages'
     import humanizeTime from '../../filters/humanizeTime'
+    import Avatar from '../commons/Avatar.vue'
 
     export default {
         props: {
@@ -38,26 +35,24 @@
             }
         },
 
-        filters: {
-            humanizeTime
+        computed: {
+            sender() {
+                return _get(this.notification, 'sender.data', null)
+            },
+            message() {
+                return {
+                    html: message(this.notification),
+                    url: !this.notification.data.message ? url(this.notification) : null
+                }
+            }
         },
 
-        methods: {
-            message,
-            toMessage() {
-                const href = _flow(url, utils.utmUrl)(this.notification)
-                console.log(href)
-                Tab.create(href)
-            },
+        components: {
+            Avatar
+        },
 
-            toSender() {
-                const url = utils.userUrl(this.notification.sender.data)
-                Tab.create(url)
-            },
-
-            hasSender() {
-                return !_.isEmpty(this.notification.sender);
-            }
+        filters: {
+            humanizeTime
         }
     }
 </script>

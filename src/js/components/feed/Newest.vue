@@ -5,9 +5,7 @@
         </div>
 
         <div class="feed-wrapper">
-            <template v-for="post in posts">
-                <post :post="post" :is-new="isNewPost(post)"></post>
-            </template>
+            <post v-for="(post, index) in posts" :key="index" :post="post" :is-new="isNewPost(post)"></post>
 
             <infinite-loading
                 spinner="spiral"
@@ -17,7 +15,7 @@
         </div>
 
         <div v-if="!loading" class="has-text-right">
-            <a @click.prevent="newestsPage">More articles on Viblo</a>
+            <ext-link :to="newestsPage" :utm="true">More articles on Viblo</ext-link>
         </div>
     </div>
 </template>
@@ -33,7 +31,6 @@
     import api from '../../api';
     import Notifications from '../../services/Notifications';
     import {ROOT_URL, NEW_POSTS} from '../../constants';
-    import Tab from '../../services/Tab';
 
     export default {
         data() {
@@ -41,7 +38,8 @@
                 keys: '',
                 posts: [],
                 loading: true,
-                lastOpen: null
+                lastOpen: null,
+                newestsPage: ROOT_URL
             };
         },
 
@@ -61,7 +59,7 @@
             getNewestPosts() {
                 api.getNewestPosts()
                     .then((newPosts) => {
-                        this.posts = newPosts || [];
+                        this.posts = newPosts.data || [];
                         this.loading = false;
                         this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
                     });
@@ -73,10 +71,6 @@
                 }
 
                 return post.published_at > this.lastOpen;
-            },
-
-            newestsPage() {
-                Tab.create(ROOT_URL);
             }
         },
     }
