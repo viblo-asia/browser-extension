@@ -26,5 +26,9 @@
     "vue-infinite-loading": "^2.0.0",
     "webpack": "^2.2.1",
     "yargs": "^7.0.1"
+  },
+  "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2016": "^6.24.1"
   }
 }

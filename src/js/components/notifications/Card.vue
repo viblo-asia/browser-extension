@@ -23,7 +23,8 @@
 
 <script>
     import _get from 'lodash/get'
-    import { message, url } from './messages'
+    import { message } from './messages'
+    import { url } from './url'
     import humanizeTime from '../../filters/humanizeTime'
     import Avatar from '../commons/Avatar.vue'
 

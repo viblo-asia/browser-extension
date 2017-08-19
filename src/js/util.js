@@ -46,6 +46,16 @@ export default {
         return `${EXTENSION_ROOT_URL}/${postUrl}`;
     },
 
+    questionUrl(question) {
+        if (question.url) {
+            return question.url
+        }
+
+        const questionUrl = `q/${question.title_slug}-${question.hash_id}`
+
+        return `${EXTENSION_ROOT_URL}/${questionUrl}`;
+    },
+
     userUrl(user) {
         const username = typeof user === 'string' ? user : _.get(user, 'username');
 
