@@ -78,7 +78,7 @@ const listen = (echo, authenticated) => {
 const updateBadgeCounters = (authenticated) => {
     Promise.all([Notifications.getLastOpen(Constants.NEW_POSTS), api.getNewestPosts()])
         .then(([lastOpen, posts]) => {
-            const newPostsCount = posts.filter((post) => post.published_at > lastOpen).length;
+            const newPostsCount = posts.data.filter((post) => post.published_at > lastOpen).length;
 
             Counter.set(Constants.NEW_POSTS, newPostsCount);
         });

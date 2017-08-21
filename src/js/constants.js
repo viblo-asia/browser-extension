@@ -13,6 +13,7 @@ export const ECHO_URL = EXTENSION_ECHO_URL;
 
 export const API_USER = `${API_URL}/user`;
 export const API_FEED_NEWEST = `${API_URL}/api/feed/newest`;
+export const API_QUESTIONS = `${API_URL}/api/questions`;
 export const API_NOTIFICATIONS = `${API_URL}/api/notifications`;
 export const API_NOTIFICATION_CLEAR = `${API_URL}/api/notifications/clear`;
 export const API_UPDATE_VISIT = `${API_URL}/api/update-visit`;

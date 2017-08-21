@@ -27,14 +27,21 @@
                     <feed-newest></feed-newest>
                 </tab>
 
-                <tab id="notifications" name="Notifications" v-if="authenticated" :position="2"
+                <tab id="newest-questions" name="Questions" :position="2"
+                    @leave="clearTabBadge('newQuestions')"
+                    :badge="this.counters.newQuestions"
+                >
+                    <question-list></question-list>
+                </tab>
+
+                <tab id="notifications" name="Notifications" v-if="authenticated" :position="3"
                     @selected="this.clearNotifications" @leave="clearTabBadge('unreadNotifications')"
                     :badge="this.counters.unreadNotifications"
                 >
                     <notifications></notifications>
                 </tab>
 
-                <tab id="settings" name="Settings" :position="3">
+                <tab id="settings" name="Settings" :position="4">
                     <options :authenticated="authenticated"></options>
                 </tab>
             </tabs>
@@ -53,6 +60,7 @@
     import Options from './Options.vue';
     import Avatar from './commons/Avatar.vue'
     import FeedNewest from './feed/Newest.vue';
+    import QuestionList from './questions/List.vue';
     import Notifications from './notifications/List.vue';
 
     import Auth from '../services/Auth';
@@ -70,6 +78,7 @@
                 authenticated: false,
                 counters: {
                     newPosts: 0,
+                    newQuestions: 0,
                     unreadNotifications: 0
                 }
             };
@@ -81,7 +90,8 @@
             Avatar,
             Options,
             FeedNewest,
-            Notifications
+            Notifications,
+            QuestionList,
         },
 
         computed: {

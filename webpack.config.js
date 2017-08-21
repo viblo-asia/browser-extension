@@ -3,6 +3,14 @@ let webpack = require('webpack');
 let Mix = require('laravel-mix').config;
 let plugins = require('laravel-mix').plugins;
 
+let babelConfig = '?' + JSON.stringify({
+    'cacheDirectory': true,
+    'presets': [
+        ['es2016']
+    ],
+    "plugins": ["transform-object-rest-spread"]
+})
+
 /*
  |--------------------------------------------------------------------------
  | Mix Initialization
@@ -77,7 +85,7 @@ module.exports.module = {
             loader: 'vue-loader',
             options: {
                 loaders: Mix.options.extractVueStyles ? {
-                    js: 'babel-loader' + Mix.babelConfig(),
+                    js: 'babel-loader' + babelConfig,
                     scss: plugins.ExtractTextPlugin.extract({
                         use: 'css-loader!sass-loader',
                         fallback: 'vue-style-loader'
@@ -91,7 +99,7 @@ module.exports.module = {
                         fallback: 'vue-style-loader'
                     })
                 }: {
-                    js: 'babel-loader' + Mix.babelConfig(),
+                    js: 'babel-loader' + babelConfig,
                     scss: 'vue-style-loader!css-loader!sass-loader',
                     sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
                 },
@@ -105,7 +113,7 @@ module.exports.module = {
         {
             test: /\.jsx?$/,
             exclude: /(node_modules|bower_components)/,
-            loader: 'babel-loader' + Mix.babelConfig()
+            loader: 'babel-loader' + babelConfig
         },
 
         {

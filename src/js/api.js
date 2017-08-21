@@ -12,6 +12,11 @@ export default {
             .then((response) => response.data.posts);
     },
 
+    getQuestions(feed = 'newest') {
+        return axios.get(Constants.API_QUESTIONS + '/' + feed)
+            .then((response) => response.data.questions);
+    },
+
     getNotifications(page) {
         return axios.get(Constants.API_NOTIFICATIONS, { params: {page} })
             .then((response) => response.data)
