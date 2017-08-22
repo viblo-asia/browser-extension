@@ -23,8 +23,6 @@
 
 <script>
     import _get from 'lodash/get'
-    import { message } from './messages'
-    import { url } from './url'
     import humanizeTime from '../../filters/humanizeTime'
     import Avatar from '../commons/Avatar.vue'
 
@@ -41,9 +39,13 @@
                 return _get(this.notification, 'sender.data', null)
             },
             message() {
-                return {
-                    html: message(this.notification),
-                    url: !this.notification.data.message ? url(this.notification) : null
+                const data = this.notification.data
+
+                return data.message ? {
+                    html: data.message
+                } : {
+                    html: _get(data, 'title.html'),
+                    url: data.url
                 }
             }
         },
