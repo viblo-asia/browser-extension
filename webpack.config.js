@@ -6,6 +6,7 @@ let plugins = require('laravel-mix').plugins;
 let babelConfig = '?' + JSON.stringify({
     'cacheDirectory': true,
     'presets': [
+        ['es2015', { 'modules': false }],
         ['es2016']
     ],
     "plugins": ["transform-object-rest-spread"]
