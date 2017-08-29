@@ -8,14 +8,15 @@
 
                 <div class="media-content">
                     <ext-link :to="toQuestion(question)" :utm="true" class-name="is-6 fw-bold mb-0">
-                        {{ question.title }}
+                       {{ question.title }} <small>&#x2714; {{ question.answers_count }}</small>
                     </ext-link>
                     <div>
                         <ext-link :to="toUser(user)" :utm="true">
                             <small><strong v-text="user.name"></strong></small>
                             <small>@{{ user.username }}</small>
                         </ext-link>
-                        <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ question.published_at | humanize-time }}</small>
+                        <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ question.created_at | humanize-time }}</small>
+                        
                     </div>
                     <div>
                         <small>

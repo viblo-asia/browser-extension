@@ -47,7 +47,7 @@
                 lastOpen: null,
                 newestsPage: ROOT_URL + '/questions',
                 feed: 'newest',
-                allowedFeeds: ['newest', 'unsolved'],
+                allowedFeeds: ['newest', 'unanswered', 'unsolved'],
             };
         },
 
