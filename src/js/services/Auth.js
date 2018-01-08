@@ -1,13 +1,14 @@
-import api from '../api';
-import {syncedStorage} from '../storage/ChromeStorage';
-import axios from 'axios';
+import {syncedStorage} from '../storage/ChromeStorage'
+import {self} from 'viblo-sdk/api/me'
+
+const auth = require('viblo-sdk/auth')
 
 export default {
     authenticated: false,
     user: null,
 
     get() {
-        return api.getUser().then((user) => {
+        return self().then((user) => {
             this.authenticated = user !== null;
             this.user = user;
 
@@ -35,13 +36,10 @@ export default {
     },
 
     login(token) {
-        const oauthToken = `Bearer ${token}`;
-
-        axios.defaults.headers.common = {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Authorization': oauthToken
-        };
+        auth.setAccessToken({
+            token_type: 'Bearer',
+            access_token: token
+        })
 
         return this.get()
             .then((user) => user ? this.storeToken(token) : Promise.reject());

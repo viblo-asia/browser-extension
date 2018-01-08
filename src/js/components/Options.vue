@@ -1,8 +1,8 @@
 <template>
     <div>
-        <login v-if="!authenticated"></login>
+        <login v-if="!authenticated"/>
 
-        <section class="mb-05" v-if="authenticated">
+        <section v-if="authenticated" class="mb-05">
             <button @click="logout" class="button is-danger">Logout</button>
             <div class="notification is-warning small-text mt-05">
                 After logging out, you will no longer receive your notifications related to your account on Viblo.
@@ -14,30 +14,38 @@
             <form @submit.prevent="onSubmit">
                 <div class="control">
                     <label class="checkbox">
-                        <input type="checkbox" v-model="form.newPostNotification">
+                        <input type="checkbox" v-model="form.newPostNotification"/>
                         <strong>Receive Notifications about Newly Published Posts</strong>
                     </label>
 
                     <div class="notification small-text mt-05">
-                        You will receive notifications anytime an author publishes new posts on Viblo. You may turn on/off this option here.
+                        You will receive notifications anytime an author publishes new posts on Viblo.
+                        You may turn on/off this option here.
                     </div>
                 </div>
 
                 <div class="control" v-if="this.authenticated">
-                    <label class="label"><strong>Badge counter type</strong></label>
+                    <label class="label">
+                        <strong>Badge counter type</strong>
+                    </label>
 
                     <label class="radio">
-                        <input type="radio" value="all" v-model="form.badgeTextType">
+                        <input type="radio" value="all" v-model="form.badgeTextType"/>
                         <span>All</span>
                     </label>
 
                     <label class="radio">
-                        <input type="radio" value="unreadNotifications" v-model="form.badgeTextType">
+                        <input type="radio" value="unreadNotifications" v-model="form.badgeTextType"/>
                         <span>Unread Notifications</span>
                     </label>
 
                     <label class="radio">
-                        <input :disabled="!this.form.newPostNotification" type="radio" value="newPosts" v-model="form.badgeTextType">
+                        <input
+                            type="radio"
+                            value="newPosts"
+                            v-model="form.badgeTextType"
+                            :disabled="!this.form.newPostNotification"
+                        />
                         <span>New Posts</span>
                     </label>
 

@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-es2016": "^6.24.1"
+    "babel-preset-es2016": "^6.24.1",
+    "viblo-sdk": "https://github.com/viblo-asia/sdk-js#8b8e8726d7f6177e46b3bd24f690505865476878"
   }
 }

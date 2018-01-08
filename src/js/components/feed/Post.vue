@@ -3,7 +3,11 @@
         <div class="card-content">
             <div class="media">
                 <div class="media-left">
-                    <Avatar class-name="is-md-avatar" :username="user.username" :images="user.avatar"/>
+                    <avatar
+                        class-name="is-md-avatar"
+                        :username="user.username"
+                        :images="user.avatar"
+                    />
                 </div>
 
                 <div class="media-content">
@@ -23,21 +27,16 @@
     </div>
 </template>
 
-<style lang="sass">
-    .card
-        &.highlighted
-            background-color: rgba(75, 205, 159, .15)
-
-            &:hover
-                background-color: rgba(75, 205, 159, .35)
-</style>
-
 <script>
     import utils from '../../util';
     import Avatar from '../commons/Avatar.vue';
     import humanizeTime from '../../filters/humanizeTime'
 
     export default {
+        components: {
+            Avatar
+        },
+
         props: {
             post: {
                 type: Object,
@@ -48,10 +47,6 @@
                 type: Boolean,
                 default: false
             }
-        },
-
-        components: {
-            Avatar
         },
 
         filters: {
@@ -70,3 +65,12 @@
         }
     }
 </script>
+
+<style lang="sass">
+    .card
+        &.highlighted
+            background-color: rgba(75, 205, 159, .15)
+
+            &:hover
+                background-color: rgba(75, 205, 159, .35)
+</style>

@@ -3,11 +3,19 @@
         <div class="card-content">
             <div class="media">
                 <div class="media-left">
-                    <Avatar class-name="is-md-avatar" :username="user.username" :images="user.avatar"/>
+                    <avatar
+                        class-name="is-md-avatar"
+                        :username="user.username"
+                        :images="user.avatar"
+                    />
                 </div>
 
                 <div class="media-content">
-                    <ext-link :to="toQuestion(question)" :utm="true" class-name="is-6 fw-bold mb-0">
+                    <ext-link
+                        :to="toQuestion(question)"
+                        :utm="true"
+                        class-name="is-6 fw-bold mb-0"
+                    >
                        {{ question.title }} <small>&#x2714; {{ question.answers_count }}</small>
                     </ext-link>
                     <div>
@@ -16,7 +24,7 @@
                             <small>@{{ user.username }}</small>
                         </ext-link>
                         <small>&nbsp;&nbsp;&nbsp;&nbsp;{{ question.created_at | humanize-time }}</small>
-                        
+
                     </div>
                     <div>
                         <small>
