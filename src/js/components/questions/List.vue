@@ -2,7 +2,14 @@
     <div>
         <div class="tabs is-right is-small is-boxed">
             <ul>
-                <li v-for="allowedFeed in allowedFeeds" @click="activeFeed(allowedFeed)" :class="{'is-active': feed === allowedFeed}"><a>{{ ucfirst(allowedFeed) }}</a></li>
+                <li
+                    v-for="(allowedFeed, index) in allowedFeeds"
+                    :key="index"
+                    @click="activeFeed(allowedFeed)"
+                    :class="{'is-active': feed === allowedFeed}"
+                >
+                    <a>{{ ucfirst(allowedFeed) }}</a>
+                </li>
             </ul>
         </div>
         <div class="notification mb-0" v-if="questions.length === 0">
@@ -10,7 +17,12 @@
         </div>
 
         <div class="feed-wrapper">
-            <question v-for="(question, index) in questions" :key="index" :question="question" :is-new="isNewQuestion(question)"></question>
+            <question
+                v-for="(question, index) in questions"
+                :key="index"
+                :question="question"
+                :is-new="isNewQuestion(question)"
+            />
 
             <infinite-loading
                 spinner="spiral"
@@ -20,7 +32,9 @@
         </div>
 
         <div v-if="!loading" class="has-text-right">
-            <ext-link :to="newestsPage" :utm="true">More questions on Viblo</ext-link>
+            <ext-link :to="newestsPage" :utm="true">
+                More questions on Viblo
+            </ext-link>
         </div>
     </div>
 </template>
@@ -37,6 +51,7 @@
     import Notifications from '../../services/Notifications';
     import {ROOT_URL, NEW_POSTS} from '../../constants';
     import _upperFirst from 'lodash/upperFirst';
+    import { getQuestionsFeed } from 'viblo-sdk/api/questions'
 
     export default {
         data() {
@@ -56,19 +71,11 @@
             InfiniteLoading
         },
 
-        mounted() {
-            Notifications.getLastOpen(NEW_POSTS)
-                .then((lastOpen) => {
-                    this.lastOpen = lastOpen;
-                });
-            this.getNewestQuestions()
-        },
-
         methods: {
             getNewestQuestions() {
-                api.getQuestions(this.feed)
-                    .then((newQuestions) => {
-                        this.questions = newQuestions.data || [];
+                getQuestionsFeed(this.feed)
+                    .then((questions) => {
+                        this.questions = questions.data || [];
                         this.loading = false;
                         this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
                     });
@@ -91,5 +98,14 @@
                 return question.published_at > this.lastOpen;
             }
         },
+
+        mounted() {
+            Notifications.getLastOpen(NEW_POSTS)
+                .then((lastOpen) => {
+                    this.lastOpen = lastOpen;
+                })
+
+            this.getNewestQuestions()
+        }
     }
 </script>

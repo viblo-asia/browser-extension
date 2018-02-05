@@ -1,7 +1,12 @@
 <template>
     <div class="notification-item" :class="{ 'new': !notification.is_read }">
         <div class="avt-ctn">
-            <Avatar v-if="sender !== null" :username="sender.username" :images="sender.avatar" class-name="is-md-avatar"/>
+            <avatar
+                v-if="sender !== null"
+                :username="sender.username"
+                :images="sender.avatar"
+                class-name="is-md-avatar"
+            />
         </div>
 
         <!-- Legacy notification only -->

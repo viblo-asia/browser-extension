@@ -2,16 +2,22 @@
     <div>
         <div class="tabs is-toggle is-fullwidth">
             <ul>
-                <li v-for="tab in orderedTabs" class="tab" :class="{ 'is-active': tab.active }">
+                <li
+                    v-for="tab in orderedTabs"
+                    class="tab"
+                    :class="{ 'is-active': tab.active }"
+                >
                     <a href="#" @click.prevent="selectTab(tab)">
                         {{ tab.name }}
-                        <span v-if="tab.badge > 0" class="tab-badge">{{ tab.badge }}</span>
+                        <span v-if="tab.badge > 0" class="tab-badge">
+                            {{ tab.badge }}
+                        </span>
                     </a>
                 </li>
             </ul>
         </div>
         <div class="tabs-details">
-            <slot></slot>
+            <slot/>
         </div>
     </div>
 </template>

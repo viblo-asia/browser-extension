@@ -10,10 +10,16 @@
                     class="input"
                     v-model="form.oauthToken"
                     placeholder="Paste your private API token here..."
-                    required
-                >
+                    required="required"
+                />
 
-                <span v-if="state.logInError" class="mt-05 help is-danger">Cannot log in with the provided API key. Please review your API key. Click "Show guides" below if you need help.</span>
+                <span
+                    v-if="state.logInError"
+                    class="mt-05 help is-danger"
+                >
+                    Cannot log in with the provided API key. Please review your API key.
+                    Click "Show guides" below if you need help.
+                </span>
 
                 <span class="help is-info">
                     <a href="#" v-text="guideText" @click.prevent="toggleGuides"></a>
@@ -34,8 +40,13 @@
                 </li>
                 <li>
                     Click <strong class="color-primary">New API key</strong> button on the
-                    <strong class="color-primary">API keys</strong> panel, and specify a name for your API key.</li>
-                <li>Copy the generated API key and paste it in the below form. Note that this key is only visible once.</li>
+                    <strong class="color-primary">API keys</strong> panel,
+                    and specify a name for your API key.
+                </li>
+                <li>
+                    Copy the generated API key and paste it in the below form.
+                    Note that this key is only visible once.
+                </li>
             </ul>
         </div>
     </section>

@@ -1,43 +1,24 @@
-import axios from 'axios';
-import * as Constants from './constants';
+import {clearNotifications} from 'viblo-sdk/api/me'
+import {search, SearchType} from 'viblo-sdk/api/search'
+import axios from 'viblo-sdk/libs/axios'
 
 export default {
-    getUser() {
-        return axios.get(Constants.API_USER)
-            .then((response) => response.data.data);
-    },
-
-    getNewestPosts() {
-        return axios.get(Constants.API_FEED_NEWEST)
-            .then((response) => response.data.posts);
-    },
-
-    getQuestions(feed = 'newest') {
-        return axios.get(Constants.API_QUESTIONS + '/' + feed)
-            .then((response) => response.data.questions);
-    },
-
-    getNotifications(page) {
-        return axios.get(Constants.API_NOTIFICATIONS, { params: {page} })
-            .then((response) => response.data)
-    },
-
     clearNotification(shouldDelete = false) {
         const params = shouldDelete ? {delete: true} : {};
 
-        return axios.post(Constants.API_NOTIFICATION_CLEAR, {params})
+        return clearNotifications(params)
             .then(() => true)
             .catch(() => false);
     },
 
     updateHomepageVisit() {
-        return axios.put(Constants.API_UPDATE_VISIT)
+        return axios.put(`${EXTENSION_API_URL}/me/activity/visit/newest`)
             .then(() => true)
             .catch(() => false);
     },
 
     searchPost(query) {
-        return axios.get(`${Constants.API_POST_SEARCH}/?q=${query}`)
+        return search(SearchType.Post, { q: query, s: '', o: '' })
             .then((response) => response.data)
     }
 }

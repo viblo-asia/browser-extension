@@ -12,7 +12,11 @@
                             <h3 class="subtitle">Free service for technical knowledge sharing.</h3>
                         </div>
 
-                        <Avatar v-if="currentUser" :username="currentUser.username" :images="currentUser.avatar"/>
+                        <avatar
+                            v-if="currentUser"
+                            :username="currentUser.username"
+                            :images="currentUser.avatar"
+                        />
                     </div>
                 </div>
             </div>
@@ -20,35 +24,51 @@
 
         <div class="content-wrapper">
             <tabs class="navigation">
-                <tab id="newest-posts" name="Newest Posts" :selected="true" :position="1"
-                    @selected="this.readNewPosts" @leave="clearTabBadge('newPosts')"
+                <tab
+                    id="newest-posts"
+                    name="Newest Posts"
+                    :selected="true"
+                    :position="1"
+                    @selected="this.readNewPosts"
+                    @leave="clearTabBadge('newPosts')"
                     :badge="this.counters.newPosts"
                 >
-                    <feed-newest></feed-newest>
+                    <feed-newest/>
                 </tab>
 
-                <tab id="newest-questions" name="Questions" :position="2"
+                <tab
+                    id="newest-questions"
+                    name="Questions"
+                    :position="2"
                     @leave="clearTabBadge('newQuestions')"
                     :badge="this.counters.newQuestions"
                 >
-                    <question-list></question-list>
+                    <question-list/>
                 </tab>
 
-                <tab id="notifications" name="Notifications" v-if="authenticated" :position="3"
-                    @selected="this.clearNotifications" @leave="clearTabBadge('unreadNotifications')"
+                <tab
+                    id="notifications"
+                    name="Notifications"
+                    v-if="authenticated"
+                    :position="3"
+                    @selected="this.clearNotifications"
+                    @leave="clearTabBadge('unreadNotifications')"
                     :badge="this.counters.unreadNotifications"
                 >
-                    <notifications></notifications>
+                    <notifications/>
                 </tab>
 
                 <tab id="settings" name="Settings" :position="4">
-                    <options :authenticated="authenticated"></options>
+                    <options :authenticated="authenticated"/>
                 </tab>
             </tabs>
         </div>
 
         <div class="footer">
-            <a class="rate" @click="storePage"><span>If you like Viblo's News Feed, please </span><span class="color-primary hoverable">rate us!</span></a>
+            <a class="rate" @click="storePage">
+                <span>If you like Viblo's News Feed, please </span>
+                <span class="color-primary hoverable">rate us!</span>
+            </a>
         </div>
     </div>
 </template>

@@ -7,7 +7,11 @@
             />
         </template>
 
-        <infinite-loading spinner="spiral" ref="loader" :on-infinite="getNotifications"/>
+        <infinite-loading
+            spinner="spiral"
+            ref="loader"
+            :on-infinite="getNotifications"
+        />
     </div>
 </template>
 
@@ -16,7 +20,7 @@
     import InfiniteLoading from 'vue-infinite-loading';
     import Notifications from '../../services/Notifications';
     import { UNREAD_NOTIFICATIONS } from '../../constants';
-    import api from '../../api'
+    import {getNotifications} from 'viblo-sdk/api/me'
 
     export default {
         components: {
@@ -33,10 +37,8 @@
 
         methods: {
             getNotifications() {
-                api.getNotifications(this.nextPage)
-                    .then((data) => {
-                        const notifications = data.notifications;
-
+                getNotifications({ page: this.nextPage })
+                    .then(({ notifications }) => {
                         this.notifications = [...this.notifications, ...notifications.data];
 
                         const pagination = notifications.meta.pagination;
@@ -44,7 +46,9 @@
                             ? pagination.current_page + 1
                             : null;
                         this.nextPage = nextPage;
-                        this.$refs.loader.$emit(nextPage ? '$InfiniteLoading:loaded' : '$InfiniteLoading:complete');
+                        this.$refs.loader.$emit(
+                            nextPage ? '$InfiniteLoading:loaded' : '$InfiniteLoading:complete'
+                        );
                     })
             }
         },
