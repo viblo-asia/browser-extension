@@ -4970,16 +4970,6 @@ verror@1.3.6:
     markdown-it "^8.4.0"
     remarkable "^1.7.1"
 
-"viblo-sdk@https://github.com/viblo-asia/sdk-js#dist":
-  version "0.1.0"
-  resolved "https://github.com/viblo-asia/sdk-js#95bae846a2a915ef98b024daf8cd7784020b5e87"
-  dependencies:
-    axios "^0.17.1"
-    bluebird "^3.5.1"
-    laravel-echo "^1.3.2"
-    markdown-it "^8.4.0"
-    remarkable "^1.7.1"
-
 vlq@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/vlq/-/vlq-0.2.1.tgz#14439d711891e682535467f8587c5630e4222a6c"
