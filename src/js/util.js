@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { WEB_URL, BROWSER } from '~/js/constants';
 
 export function getChromeStorage(local = false) {
     if (local) {
@@ -20,8 +21,8 @@ export default {
         }
 
         const query = _.chain({ source, medium, name, term, content })
-            .map((value, name) => value ? `utm_${name}=${encodeURI(value)}` : null)
-            .filter((param) => param !== null)
+            .map((value, name) => (value ? `utm_${name}=${encodeURI(value)}` : null))
+            .filter(param => param !== null)
             .join('&');
 
         const firstSeparator = url.indexOf('?') === -1 ? '?' : '&';
@@ -43,17 +44,17 @@ export default {
         const postUrl = isUserPost ? `${category}/posts/${post.slug}` :
             `${category}/${post.slug}`;
 
-        return `${EXTENSION_ROOT_URL}/${postUrl}`;
+        return `${WEB_URL}/${postUrl}`;
     },
 
     questionUrl(question) {
         if (question.url) {
-            return question.url
+            return question.url;
         }
 
-        const questionUrl = `q/${question.title_slug}-${question.hash_id}`
+        const questionUrl = `q/${question.title_slug}-${question.hash_id}`;
 
-        return `${EXTENSION_ROOT_URL}/${questionUrl}`;
+        return `${WEB_URL}/${questionUrl}`;
     },
 
     userUrl(user) {
@@ -63,6 +64,6 @@ export default {
             throw new Error('Invalid user');
         }
 
-        return `${EXTENSION_ROOT_URL}/u/${user.username}`;
+        return `${WEB_URL}/u/${user.username}`;
     }
-}
+};

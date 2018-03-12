@@ -1,5 +1,5 @@
 import Tab from '../services/Tab';
-import {ROOT_URL} from '../constants';
+import { WEB_URL } from '../constants';
 import api from '../api';
 import _ from 'lodash';
 
@@ -33,7 +33,7 @@ export default({
 
         chrome.omnibox.onInputEntered.addListener((text, disposition) => {
             const isUrl = /^(https?):\/\/[^\s/$.?#].[^\s]*$/.test(text);
-            const url = isUrl ? text : `${ROOT_URL}/search/?q=${text}`;
+            const url = isUrl ? text : `${WEB_URL}/search/?q=${text}`;
 
             switch (disposition) {
                 case 'currentTab':

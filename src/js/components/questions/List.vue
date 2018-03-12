@@ -5,14 +5,14 @@
                 <li
                     v-for="(allowedFeed, index) in allowedFeeds"
                     :key="index"
-                    @click="activeFeed(allowedFeed)"
                     :class="{'is-active': feed === allowedFeed}"
+                    @click="activeFeed(allowedFeed)"
                 >
                     <a>{{ ucfirst(allowedFeed) }}</a>
                 </li>
             </ul>
         </div>
-        <div class="notification mb-0" v-if="questions.length === 0">
+        <div v-if="questions.length === 0" class="notification mb-0">
             There are no new questions.
         </div>
 
@@ -25,9 +25,9 @@
             />
 
             <infinite-loading
-                spinner="spiral"
                 ref="infiniteLoading"
-                :on-infinite="getNewestQuestions"
+                spinner="spiral"
+                @infinite="getNewestQuestions"
             />
         </div>
 
@@ -45,30 +45,39 @@
 </style>
 
 <script>
-    import Question from './Question';
-    import InfiniteLoading from 'vue-infinite-loading';
-    import api from '../../api';
-    import Notifications from '../../services/Notifications';
-    import {ROOT_URL, NEW_POSTS} from '../../constants';
     import _upperFirst from 'lodash/upperFirst';
-    import { getQuestionsFeed } from 'viblo-sdk/api/questions'
+    import InfiniteLoading from 'vue-infinite-loading';
+    import { getQuestionsFeed } from 'viblo-sdk/api/questions';
+
+    import Question from './Question.vue';
+    import Notifications from '../../services/Notifications';
+    import { WEB_URL, NEW_POSTS } from '../../constants';
 
     export default {
+
+        components: {
+            Question,
+            InfiniteLoading
+        },
         data() {
             return {
                 keys: '',
                 questions: [],
                 loading: true,
                 lastOpen: null,
-                newestsPage: ROOT_URL + '/questions',
+                newestsPage: `${WEB_URL}/questions`,
                 feed: 'newest',
-                allowedFeeds: ['newest', 'unanswered', 'unsolved'],
+                allowedFeeds: ['newest', 'unanswered', 'unsolved']
             };
         },
 
-        components: {
-            Question,
-            InfiniteLoading
+        mounted() {
+            Notifications.getLastOpen(NEW_POSTS)
+                .then((lastOpen) => {
+                    this.lastOpen = lastOpen;
+                });
+
+            this.getNewestQuestions();
         },
 
         methods: {
@@ -77,17 +86,17 @@
                     .then((questions) => {
                         this.questions = questions.data || [];
                         this.loading = false;
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
+                        this.$refs.infiniteLoading.stateChanger.complete();
                     });
             },
 
-            activeFeed (feed) {
-                this.feed = feed
-                this.getNewestQuestions()
+            activeFeed(feed) {
+                this.feed = feed;
+                this.getNewestQuestions();
             },
 
-            ucfirst (val) {
-                return _upperFirst(val)
+            ucfirst(val) {
+                return _upperFirst(val);
             },
 
             isNewQuestion(question) {
@@ -97,15 +106,6 @@
 
                 return question.published_at > this.lastOpen;
             }
-        },
-
-        mounted() {
-            Notifications.getLastOpen(NEW_POSTS)
-                .then((lastOpen) => {
-                    this.lastOpen = lastOpen;
-                })
-
-            this.getNewestQuestions()
         }
-    }
+    };
 </script>

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Tab from '../services/Tab';
 import Counter from '../services/Counter';
-import {ROOT_URL, NEW_POSTS, UNREAD_NOTIFICATIONS} from '../constants';
+import {WEB_URL, NEW_POSTS, UNREAD_NOTIFICATIONS} from '../constants';
 
 const NotificationStore = {
     items: [],
@@ -60,10 +60,10 @@ const targetUrl = (notification) => {
     if (notification.post) {
         const post = notification.post;
 
-        return post.url || `${ROOT_URL}/${post.author}/posts/${post.slug}`;
+        return post.url || `${WEB_URL}/${post.author}/posts/${post.slug}`;
     }
 
-    return `${ROOT_URL}/notifications`;
+    return `${WEB_URL}/notifications`;
 }
 
 export default {

@@ -6,6 +6,8 @@ mix-manifest.json
 .env.*
 !.env.example
 !.env.staging
+!.env.production
 npm-debug.log
-extension.chrome.zip
-extension.firefox.zip
+/*.log
+build
+dist

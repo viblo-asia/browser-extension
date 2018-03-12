@@ -2,7 +2,7 @@
     import utils from '../../util'
     import _flow from 'lodash/fp/flow'
     import Tab from '../../services/Tab'
-    import { ROOT_URL } from '../../constants'
+    import { WEB_URL } from '../../constants'
 
     const open = (url) => {
         Tab.create(url)
@@ -14,7 +14,7 @@
             return url
         }
 
-        return url.startsWith('/') ? `${ROOT_URL}${url}` : `${ROOT_URL}/${url}`
+        return url.startsWith('/') ? `${WEB_URL}${url}` : `${WEB_URL}/${url}`
     }
 
     export default {

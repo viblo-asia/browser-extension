@@ -13,9 +13,9 @@
             />
 
             <infinite-loading
-                spinner="spiral"
                 ref="infiniteLoading"
-                :on-infinite="getNewestPosts"
+                spinner="spiral"
+                @infinite="getNewestPosts"
             />
         </div>
 
@@ -33,11 +33,12 @@
 </style>
 
 <script>
-    import Post from './Post';
     import InfiniteLoading from 'vue-infinite-loading';
+    import { getPostsFeed } from 'viblo-sdk/api/posts';
+
+    import Post from './Post.vue';
+    import { WEB_URL, NEW_POSTS } from '../../constants';
     import Notifications from '../../services/Notifications';
-    import {ROOT_URL, NEW_POSTS} from '../../constants';
-    import {getPostsFeed} from 'viblo-sdk/api/posts'
 
     export default {
         components: {
@@ -51,7 +52,7 @@
                 posts: [],
                 loading: true,
                 lastOpen: null,
-                newestsPage: ROOT_URL,
+                newestsPage: WEB_URL,
                 feed: 'newest'
             };
         },
@@ -62,7 +63,7 @@
                     .then((newPosts) => {
                         this.posts = newPosts.data || [];
                         this.loading = false;
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
+                        this.$refs.infiniteLoading.stateChanger.complete();
                     });
             },
 

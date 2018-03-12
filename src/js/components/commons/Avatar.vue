@@ -1,23 +1,25 @@
 <script>
-    import utils from '../../util'
-    import Link from './Link.vue'
+    import { WEB_URL } from '~/js/constants';
+
+    import Link from './Link.vue';
+    import utils from '../../util';
 
     export default {
+        functional: true,
+
         props: {
             className: [String, Array, Object],
             username: String,
             images: {
                 type: [Array, String],
-                required: true,
+                required: true
             }
         },
 
-        functional: true,
-
         render: (h, { props }) => {
-            const images = props.images ? props.images : `${EXTENSION_ROOT_URL}/images/mm.png`
-            const user = { username: props.username }
-            const [desktop, retina] = typeof images === 'string' ? [images, images] : images
+            const images = props.images ? props.images : `${WEB_URL}/images/mm.png`;
+            const user = { username: props.username };
+            const [desktop, retina] = typeof images === 'string' ? [images, images] : images;
 
             return (
                 <Link
@@ -30,7 +32,7 @@
                         title={props.username}
                     />
                 </Link>
-            )
+            );
         }
-    }
+    };
 </script>

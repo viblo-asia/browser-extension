@@ -8,9 +8,9 @@
         </template>
 
         <infinite-loading
-            spinner="spiral"
             ref="loader"
-            :on-infinite="getNotifications"
+            spinner="spiral"
+            @infinite="getNotifications"
         />
     </div>
 </template>
@@ -46,9 +46,7 @@
                             ? pagination.current_page + 1
                             : null;
                         this.nextPage = nextPage;
-                        this.$refs.loader.$emit(
-                            nextPage ? '$InfiniteLoading:loaded' : '$InfiniteLoading:complete'
-                        );
+                        this.$refs.infiniteLoading.stateChanger.complete();
                     })
             }
         },
