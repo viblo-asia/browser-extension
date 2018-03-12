@@ -48,7 +48,7 @@
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
     "socket.io-client": "^2.0.4",
-    "viblo-sdk": "https://github.com/viblo-asia/sdk-js#8b8e8726d7f6177e46b3bd24f690505865476878",
+    "viblo-sdk": "https://github.com/viblo-asia/sdk-js#4864660",
     "vue": "^2.5.14",
     "vue-infinite-loading": "^2.2.3"
   }

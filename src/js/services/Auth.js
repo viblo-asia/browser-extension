@@ -1,7 +1,7 @@
-import {syncedStorage} from '../storage/ChromeStorage'
-import {self} from 'viblo-sdk/api/me'
+import { self } from 'viblo-sdk/api/me';
+import { syncedStorage } from '../storage/ChromeStorage';
 
-const auth = require('viblo-sdk/auth')
+const auth = require('viblo-sdk/auth');
 
 export default {
     authenticated: false,
@@ -9,10 +9,10 @@ export default {
 
     get() {
         return self().then((user) => {
-            this.authenticated = user !== null;
-            this.user = user;
+            this.authenticated = true;
+            this.user = user.data;
 
-            return user;
+            return this.user;
         });
     },
 
@@ -23,7 +23,7 @@ export default {
     storeToken(token) {
         const data = {
             authenticated: true,
-            oauthToken: `Bearer ${token}`,
+            oauthToken: `${token}`,
             options: {
                 badgeTextType: 'all',
                 newPostNotification: true
@@ -39,9 +39,9 @@ export default {
         auth.setAccessToken({
             token_type: 'Bearer',
             access_token: token
-        })
+        });
 
         return this.get()
-            .then((user) => user ? this.storeToken(token) : Promise.reject());
+            .then(user => (user ? this.storeToken(token) : Promise.reject()));
     }
-}
+};

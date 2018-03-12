@@ -1,9 +1,9 @@
+import _ from 'lodash';
+import api from '../api';
 import Tab from '../services/Tab';
 import { WEB_URL } from '../constants';
-import api from '../api';
-import _ from 'lodash';
 
-const createSuggestionsFromResponse = (posts) => posts.map((post) => ({
+const createSuggestionsFromResponse = posts => posts.map(post => ({
     content: post.url,
     description: post.title
 }));
@@ -45,7 +45,9 @@ export default({
                 case 'newBackgroundTab':
                     Tab.create(url, true, false);
                     break;
+                default:
+                    break;
             }
-        })
+        });
     }
-})
+});

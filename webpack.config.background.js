@@ -1,4 +1,6 @@
 const path = require('path');
+const { ProvidePlugin } = require('webpack');
+const DotenvPlugin = require('dotenv-webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const makeManifest = require('./builder/make-manifest');
@@ -20,6 +22,12 @@ module.exports = buildEnv => ({
         ]
     },
     plugins: [
+        new DotenvPlugin({
+            path: buildEnv.envfile
+        }),
+        new ProvidePlugin({
+            io: 'socket.io-client'
+        }),
         new CopyPlugin([
             {
                 from: './assets/manifest.template.json',

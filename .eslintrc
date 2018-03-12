@@ -19,12 +19,17 @@
   "rules": {
     "linebreak-style": "off",
     "comma-dangle": ["error", "never"],
-    "indent": ["error", 4],
+    "indent": ["error", 4, {
+      "SwitchCase": 1
+    }],
     "max-len": ["warn", 120],
     "no-shadow": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
     "prefer-destructuring": "off",
+    "no-use-before-define": ["error", {
+      "functions": false
+    }],
     "import/prefer-default-export": "off"
   },
   "overrides": {

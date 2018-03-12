@@ -10,17 +10,18 @@
         <infinite-loading
             ref="loader"
             spinner="spiral"
-            @infinite="getNotifications"
+            @infinite="fetch"
         />
     </div>
 </template>
 
 <script>
-    import NotificationCard from './Card.vue';
     import InfiniteLoading from 'vue-infinite-loading';
-    import Notifications from '../../services/Notifications';
+    import { getNotifications } from 'viblo-sdk/api/me';
+
+    import NotificationCard from './Card.vue';
     import { UNREAD_NOTIFICATIONS } from '../../constants';
-    import {getNotifications} from 'viblo-sdk/api/me'
+    import Notifications from '../../services/Notifications';
 
     export default {
         components: {
@@ -35,8 +36,17 @@
             };
         },
 
+        mounted() {
+            this.fetch();
+
+            Notifications.getLastOpen(UNREAD_NOTIFICATIONS)
+                .then((lastOpen) => {
+                    this.lastOpen = lastOpen;
+                });
+        },
+
         methods: {
-            getNotifications() {
+            fetch() {
                 getNotifications({ page: this.nextPage })
                     .then(({ notifications }) => {
                         this.notifications = [...this.notifications, ...notifications.data];
@@ -46,18 +56,14 @@
                             ? pagination.current_page + 1
                             : null;
                         this.nextPage = nextPage;
-                        this.$refs.infiniteLoading.stateChanger.complete();
-                    })
+
+                        if (nextPage) {
+                            this.$refs.loader.stateChanger.loaded();
+                        } else {
+                            this.$refs.loader.stateChanger.complete();
+                        }
+                    });
             }
-        },
-
-        mounted() {
-            this.getNotifications();
-
-            Notifications.getLastOpen(UNREAD_NOTIFICATIONS)
-                .then((lastOpen) => {
-                    this.lastOpen = lastOpen;
-                });
         }
-    }
+    };
 </script>

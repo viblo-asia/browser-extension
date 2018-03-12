@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import * as auth from 'viblo-sdk/auth';
 import axios from 'viblo-sdk/libs/axios';
 
 import config from '../config';
@@ -14,7 +15,10 @@ axios.defaults.baseURL = config.apiUrl;
 
 syncedStorage.find('oauthToken', (oauthToken) => {
     if (oauthToken) {
-        axios.defaults.headers.common.Authorization = oauthToken;
+        auth.setAccessToken({
+            token_type: 'Bearer',
+            access_token: oauthToken
+        });
     }
 });
 
