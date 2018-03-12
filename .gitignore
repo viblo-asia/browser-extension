@@ -11,3 +11,4 @@ npm-debug.log
 /*.log
 build
 dist
+jsconfig.json

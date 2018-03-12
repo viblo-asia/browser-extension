@@ -21,7 +21,6 @@
     "copy-webpack-plugin": "^4.5.1",
     "cross-env": "^5.1.4",
     "css-loader": "^0.28.10",
-    "deep-assign": "^2.0.0",
     "dotenv-webpack": "^1.5.5",
     "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
@@ -50,6 +49,7 @@
     "socket.io-client": "^2.0.4",
     "viblo-sdk": "https://github.com/viblo-asia/sdk-js#4864660",
     "vue": "^2.5.14",
-    "vue-infinite-loading": "^2.2.3"
+    "vue-infinite-loading": "^2.2.3",
+    "vuex": "^3.0.1"
   }
 }

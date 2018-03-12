@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (buildEnv = {}) => ({
     name: 'popup',
-    entry: ['./src/js/index.js', './src/sass/app.sass'],
+    entry: ['./src/popup/index.js', './src/popup/sass/app.sass'],
     output: {
         path: path.resolve(__dirname, './build/popup'),
         filename: 'popup.js'
@@ -57,7 +57,7 @@ module.exports = (buildEnv = {}) => ({
     },
     plugins: [
         new HtmlPlugin({
-            template: './src/popup.html',
+            template: './src/popup/index.html',
             filename: 'popup.html'
         }),
         new MiniCssExtractPlugin({

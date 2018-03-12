@@ -7,7 +7,7 @@ const makeManifest = require('./builder/make-manifest');
 
 module.exports = buildEnv => ({
     name: 'background',
-    entry: './src/js/extensions/background.js',
+    entry: './src/background/background.js',
     output: {
         path: path.resolve(__dirname, './build'),
         filename: 'background.js'
