@@ -18,4 +18,6 @@ module.exports = (buildDirectory, distDirectory, archiveFile) => {
 
     archive.pipe(outputStream);
     archive.directory(buildDirectoryPath, false).finalize();
+
+    return outputStream.path;
 };

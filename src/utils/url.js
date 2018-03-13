@@ -1,15 +1,19 @@
-import _ from 'lodash';
-import { webUrl } from '../config';
+import _get from 'lodash/get';
+import _flow from 'lodash/flow';
+import _fp_pick from 'lodash/fp/pick';
+import _fp_join from 'lodash/fp/join';
+import _fp_defaults from 'lodash/fp/defaults';
+import { browser, webUrl } from '../config';
 
-export function utmUrl(url, source, medium = 'extension', name, term, content) {
-    if (!source && webUrl) {
-        source = `${webUrl}_extension`;
-    }
+const _fp_map = require('lodash/fp/map').convert({ cap: false });
 
-    const query = _.chain({ source, medium, name, term, content })
-        .map((value, name) => (value ? `utm_${name}=${encodeURI(value)}` : null))
-        .filter(param => param !== null)
-        .join('&');
+export function utmUrl(url, params) {
+    const query = _flow(
+        _fp_pick(['source', 'medium', 'name', 'term', 'content']),
+        _fp_defaults({ source: browser, medium: 'extension' }),
+        _fp_map((value, name) => `utm_${name}=${encodeURI(value)}`),
+        _fp_join('&')
+    )(params);
 
     const firstSeparator = url.indexOf('?') === -1 ? '?' : '&';
 
@@ -39,11 +43,11 @@ export function toQuestion(question) {
 }
 
 export function toUser(user) {
-    const username = typeof user === 'string' ? user : _.get(user, 'username');
+    const username = typeof user === 'string' ? user : _get(user, 'username');
 
     if (!username) {
         throw new Error('Invalid user');
     }
 
-    return `${webUrl}/u/${user.username}`;
+    return `${webUrl}/u/${username}`;
 }

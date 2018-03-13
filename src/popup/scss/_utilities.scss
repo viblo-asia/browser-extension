@@ -1,0 +1,62 @@
+.link {
+    color: $link;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+        color: #409EFF;
+    }
+}
+
+$theme-colors: (
+    "primary": $primary,
+    "black": $black,
+    "muted": $gray,
+    "green": $green
+);
+
+@each $color, $value in $theme-colors {
+    .text-#{$color} {
+        color: $value !important;
+    }
+}
+
+$spacing-types: (
+    "m": "margin",
+    "p": "padding"
+);
+
+$spacings: (
+    "05": .5rem,
+    "auto": auto
+);
+
+@each $abbr, $spacing in $spacing-types {
+    @each $class, $value in $spacings {
+        .#{$abbr}b-#{$class} {
+            margin-bottom: $value !important;
+        }
+
+        .#{$abbr}t-#{$class} {
+            margin-top: $value !important;
+        }
+
+        .#{$abbr}l-#{$class} {
+            margin-left: $value !important;
+        }
+
+        .#{$abbr}r-#{$class} {
+            margin-right: $value !important;
+        }
+
+        .#{$abbr}x-#{$class} {
+            margin-left: $value !important;
+            margin-right: $value !important;
+        }
+
+        .#{$abbr}y-#{$class} {
+            margin-top: $value !important;
+            margin-bottom: $value !important;
+        }
+    }
+}

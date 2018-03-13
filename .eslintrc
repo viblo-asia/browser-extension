@@ -19,6 +19,7 @@
   "rules": {
     "linebreak-style": "off",
     "comma-dangle": ["error", "never"],
+    "camelcase":"off",
     "indent": ["error", 4, {
       "SwitchCase": 1
     }],

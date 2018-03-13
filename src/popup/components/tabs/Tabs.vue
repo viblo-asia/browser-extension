@@ -1,78 +1,130 @@
 <template>
-    <div>
-        <div class="tabs is-toggle is-fullwidth">
-            <ul>
-                <li
-                    v-for="tab in orderedTabs"
-                    class="tab"
-                    :class="{ 'is-active': tab.active }"
-                >
-                    <a href="#" @click.prevent="selectTab(tab)">
-                        {{ tab.name }}
-                        <span v-if="tab.badge > 0" class="tab-badge">
-                            {{ tab.badge }}
-                        </span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="tabs-details">
+    <div class="tabs">
+        <el-radio-group v-model="activePane" class="tabs-list">
+            <el-radio-button
+                v-for="(pane, index) in panes"
+                :key="index"
+                :label="pane.name"
+                class="tab-item"
+            >
+                {{ pane.label }}
+                <span v-if="pane.badge > 0" class="tab-badge">
+                    {{ pane.badge }}
+                </span>
+            </el-radio-button>
+        </el-radio-group>
+
+        <div class="tab-content">
             <slot/>
         </div>
     </div>
 </template>
 
-<style lang="sass">
-    .tab
-        .tab-badge
-            border-radius: 3px
-            margin-left: 5px
-            padding: 0 5px
-            font-size: 0.9rem
-            font-weight: bold
-            background-color: #5488c7
-            color: #FFF
-
-        &.is-active
-            .tab-badge
-                background-color: #FFF
-                color: #5488c7
-
-</style>
-
 <script>
+    import _find from 'lodash/find';
+    import _flow from 'lodash/flow';
+    import _filter from 'lodash/fp/filter';
+    import _indexOf from 'lodash/fp/indexOf';
+    import _orderBy from 'lodash/fp/orderBy';
+
     export default {
+        props: {
+            initialActivePane: String
+        },
+
         data() {
             return {
-                tabs: []
+                panes: [],
+                activePane: this.initialActivePane
             };
         },
 
-        created() {
-            this.tabs = this.$children;
+        watch: {
+            activePane(current, prev) {
+                this.emitEnter(current);
+                this.emitLeave(prev);
+            }
         },
 
-        computed: {
-            orderedTabs() {
-                return _.orderBy(this.tabs, (tab) => tab.position);
-            }
+        mounted() {
+            this.emitEnter(this.initialActivePane);
         },
 
         methods: {
-            selectTab(selectedTab) {
-                this.tabs.forEach(tab => {
-                    if (tab.id == selectedTab.id) {
-                        tab.active = true;
-                        tab.$emit('selected');
-                    } else {
-                        if (tab.active) {
-                            tab.$emit('leave');
-                        }
+            addPane(pane) {
+                const index = this.getPaneIndex(pane);
 
-                        tab.active = false;
-                    }
-                });
+                this.panes = [
+                    ...this.panes.slice(0, index),
+                    pane,
+                    ...this.panes.slice(index)
+                ];
+            },
+
+            removePane(pane) {
+                const index = this.getPaneIndex(pane);
+
+                this.panes = [...this.panes.slice(0, index), ...this.panes.slice(index + 1)];
+            },
+
+            getPaneIndex(pane) {
+                return _flow(
+                    _filter(child => child.$options.componentName === 'TabPane'),
+                    _orderBy('index', 'asc'),
+                    _indexOf(pane)
+                )(this.$children);
+            },
+
+            emitEnter(pane) {
+                this.emitPaneEvent('enter', pane);
+            },
+
+            emitLeave(pane) {
+                this.emitPaneEvent('leave', pane);
+            },
+
+            emitPaneEvent(event, name) {
+                const pane = _find(this.panes, { name });
+                if (pane) {
+                    pane.$emit(event);
+                }
+            }
+        }
+    };
+</script>
+
+<style lang="scss">
+    .tabs-list {
+        display: flex;
+        width: 100%;
+        margin-bottom: 1rem;
+
+        .tab-item {
+            flex: 1;
+
+            .el-radio-button__inner {
+                width: 100%;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+
+            .tab-badge {
+                border-radius: 3px;
+                margin-left: 5px;
+                padding: 3px 5px;
+                font-size: 12px;
+                font-weight: 600;
+                background-color: #409EFF;
+                color: #FFF;
+            }
+
+            &.is-active {
+                .tab-badge {
+                    background-color: #FFF;
+                    color: #409EFF;
+                }
             }
         }
     }
-</script>
+</style>

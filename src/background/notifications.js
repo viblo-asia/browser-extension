@@ -1,33 +1,54 @@
 import { echoUrl } from '~/config';
-import * as auth from 'viblo-sdk/auth';
 import * as Echo from 'viblo-sdk/echo';
+import { self as getSelf } from 'viblo-sdk/api/me';
+import * as notifications from '~/utils/notifications';
 
-import AuthService from '../services/Auth';
-import Settings from '../services/Settings';
-import Notifier from '../services/Notifier';
+import { increment } from '../storage/counters';
+import { getSetting, Options, BadgeType } from '../storage/options';
 
-export function listenForBroadcastNotifications() {
+export async function initNotifications() {
+    chrome.notifications.onClicked.addListener(notifications.open);
+
+    listenForBroadcastEvent();
+}
+
+async function listenForBroadcastEvent() {
     const connection = Echo.newConnection({
         host: echoUrl
     });
 
-    const getUser = auth.getCurrentToken() ? AuthService.get() : new Promise(resolve => resolve(null));
+    const authUserId = await getSelf()
+        .then(_ => _.data.id)
+        .catch(() => null);
 
-    getUser.then((user) => {
-        Settings.get('newPostNotification', (value) => {
-            if (value) {
-                const newPostsChannel = Echo.joinNewPostsChannel(connection);
-                newPostsChannel.onNewPostPublished((data) => {
-                    if (!user || user.id !== data.post.author.id) {
-                        Notifier.sendNewPost(data);
-                    }
-                });
-            }
-        });
+    const shouldNotifyNewPosts = await getSetting(Options.NotifyNewPosts);
 
-        if (user) {
-            const privateChannel = Echo.joinPrivateChannel(user.id, connection);
-            privateChannel.onNewNotification(Notifier.sendNotification);
+    if (shouldNotifyNewPosts) {
+        const newPostsChannel = Echo.joinNewPostsChannel(connection);
+        newPostsChannel.onNewPostPublished(notifyNewPost(authUserId));
+    }
+
+    if (authUserId) {
+        const privateChannel = Echo.joinPrivateChannel(authUserId, connection);
+        privateChannel.onNewNotification(notifyNewNotification);
+        privateChannel.onNotificationCleared(clearUnreadNotification);
+    }
+}
+
+function notifyNewPost(authUserId) {
+    return (event) => {
+        if (authUserId !== event.post.author.id) {
+            notifications.sendNewPost(event);
+            increment(BadgeType.NewPosts);
         }
-    });
+    };
+}
+
+function notifyNewNotification(notification) {
+    notifications.sendNotification(notification);
+    increment(BadgeType.UnreadNotifications);
+}
+
+function clearUnreadNotification(event) {
+    increment(BadgeType.UnreadNotifications, -1 * event.ids.length);
 }

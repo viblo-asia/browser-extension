@@ -1,20 +1,47 @@
+import moment from 'moment';
+import _get from 'lodash/get';
 import { getPostsFeed } from 'viblo-sdk/api/posts';
 import { getNotifications } from 'viblo-sdk/api/me';
-import { NEW_POSTS, UNREAD_NOTIFICATIONS } from '~/constants';
+import { getExtensionIconBadge, renderBadge } from '~/utils/extension';
 
-import Counter from '../services/Counter';
-import Notifications from '../services/Notifications';
+import { getToken } from '../storage/oauthToken';
+import { getLastOpen } from '../storage/lastOpen';
+import { getAll, setBadge } from '../storage/counters';
+import { getSetting, Options, BadgeType } from '../storage/options';
 
-export function updateBadgeCounters(authenticated) {
-    Promise.all([Notifications.getLastOpen(NEW_POSTS), getPostsFeed('newest')])
+export async function initBadge() {
+    chrome.storage.onChanged.addListener(updateExtensionIconBadge);
+
+    Promise.all([getLastOpen(BadgeType.NewPosts), getPostsFeed('newest')])
         .then(([lastOpen, posts]) => {
-            const newPostsCount = posts.data.filter(post => post.published_at > lastOpen).length;
+            const lastOpenMoment = moment(lastOpen);
+            const newPostsCount = posts.data.filter(post => lastOpenMoment < moment(post.published_at)).length;
 
-            Counter.set(NEW_POSTS, newPostsCount);
+            setBadge(BadgeType.NewPosts, newPostsCount);
         });
 
-    if (authenticated) {
-        getNotifications()
-            .then(data => Counter.set(UNREAD_NOTIFICATIONS, data.counter));
+    const token = await getToken();
+    if (token) {
+        const { counter: unreadNotificationsCount } = await getNotifications();
+        setBadge(BadgeType.UnreadNotifications, unreadNotificationsCount);
     }
+
+    const allCounters = await getAll();
+    setExtensionBadge(allCounters);
+}
+
+function updateExtensionIconBadge(changes, areaName) {
+    const countersChanged = _get(changes, 'counters');
+
+    if (!countersChanged || areaName !== 'local') {
+        return;
+    }
+
+    setExtensionBadge(countersChanged.newValue);
+}
+
+async function setExtensionBadge(counters) {
+    const badgeType = await getSetting(Options.BadgeType);
+    const badgeText = getExtensionIconBadge(badgeType, counters);
+    renderBadge({ text: badgeText });
 }

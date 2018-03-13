@@ -3,7 +3,7 @@ import { toPost } from '~/utils/url';
 import _debounce from 'lodash/debounce';
 import { search, SearchType } from 'viblo-sdk/api/search';
 
-import Tab from '../services/Tab';
+import { openNewTab, updateCurrentUrl } from '~/utils/extension';
 
 const createSuggestionsFromResponse = posts => posts.data.map(post => ({
     content: post.url || toPost(post),
@@ -40,13 +40,13 @@ export function initQuickSearch() {
 
         switch (disposition) {
             case 'currentTab':
-                Tab.update(url);
+                updateCurrentUrl(url);
                 break;
             case 'newForegroundTab':
-                Tab.create(url);
+                openNewTab(url);
                 break;
             case 'newBackgroundTab':
-                Tab.create(url, true, false);
+                openNewTab(url, true, false);
                 break;
             default:
                 break;

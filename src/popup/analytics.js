@@ -10,5 +10,4 @@ export default function (trackingId) {
     window.ga('create', trackingId, 'auto');
     window.ga('set', 'checkProtocolTask', function(){});
     window.ga('require', 'displayfeatures');
-    window.ga('send', 'pageview', '/options.html');
 }

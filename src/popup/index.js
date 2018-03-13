@@ -1,33 +1,34 @@
 import Vue from 'vue';
-import * as auth from 'viblo-sdk/auth';
-import axios from 'viblo-sdk/libs/axios';
+import store from '~/popup/store';
+import { setUpApi } from '~/utils/api';
+import { isDev, analyticsTrackId } from '~/config';
 
-import * as config from '../config';
 import App from './components/App.vue';
 import Link from './components/commons/Link.vue';
 
 import analytics from './analytics';
-import { syncedStorage } from '../storage/ChromeStorage';
+import ElementUI from './element-ui';
 
-Vue.component('ext-link', Link);
+setUpApi();
 
-axios.defaults.baseURL = config.apiUrl;
-
-syncedStorage.find('oauthToken', (oauthToken) => {
-    if (oauthToken) {
-        auth.setAccessToken({
-            token_type: 'Bearer',
-            access_token: oauthToken
-        });
-    }
-});
-
-if (config.isDev) {
-    analytics(config.analyticsTrackId);
+if (!isDev) {
+    analytics(analyticsTrackId);
 }
 
-const app = new Vue({
-    render: h => h(App)
-});
+Vue.use(ElementUI);
+Vue.component('ext-link', Link);
 
-app.$mount('#app');
+store.dispatch('getAuthToken').then(() => {
+    const app = new Vue({
+        store,
+
+        beforeCreate() {
+            store.dispatch('getAuthUser');
+            store.dispatch('badges/get');
+        },
+
+        render: h => h(App)
+    });
+
+    app.$mount('#app');
+});

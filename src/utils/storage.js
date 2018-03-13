@@ -1,14 +1,49 @@
-import { browser } from '~/config';
+export const StorageType = {
+    Synced: 'sync',
+    Local: 'local'
+};
 
-export function getChromeStorage(local = false) {
-    if (local) {
-        return chrome.storage.local;
-    }
+const promisify = fn => (...args) =>
+    new Promise((resolve, reject) => {
+        try {
+            fn(...args, resolve);
+        } catch (error) {
+            reject(error);
+        }
+    });
 
-    if (browser === 'chrome') {
-        return chrome.storage.sync;
-    }
+/**
+ * @param   {string|string[]} keys
+ * @param   {string} storageArea
+ * @returns {Promise}
+ */
+export function get(keys, storageArea) {
+    return promisify(chrome.storage[storageArea].get)(keys)
+        .then(result => (typeof keys === 'string' ? result[keys] : result));
+}
 
-    // TODO: Check for Firefox version that support storage.sync (when there's one available)
-    return chrome.storage.local;
+/**
+ * @param   {object} items
+ * @param   {string} storageArea
+ * @returns {Promise}
+ */
+export function set(items, storageArea) {
+    return promisify(chrome.storage[storageArea].set)(items);
+}
+
+/**
+ * @param   {string|string[]} keys
+ * @param   {string} storageArea
+ * @returns {Promise}
+ */
+export function remove(keys, storageArea) {
+    return promisify(chrome.storage[storageArea].remove)(keys);
+}
+
+/**
+ * @param   {string} storageArea
+ * @returns {Promise}
+ */
+export function clear(storageArea) {
+    return promisify(chrome.storage[storageArea].clear)();
 }

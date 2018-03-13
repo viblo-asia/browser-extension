@@ -1,60 +1,63 @@
 <template>
-    <section class="section pt-0 pb-0">
+    <section class="section py-0">
         <form>
-            <div class="control">
-                <label for="oauthToken" class="label">API Token</label>
-                <input
-                    id="oauthToken"
+            <div class="control mb-05">
+                <el-input
                     v-model="form.oauthToken"
+                    size="small"
                     type="password"
                     name="oauthToken"
-                    class="input"
                     placeholder="Paste your private API token here..."
-                    required="required"
-                >
+                />
 
-                <span
+                <el-alert
                     v-if="state.logInError"
-                    class="mt-05 help is-danger"
+                    title=""
+                    type="error"
+                    class="mt-05"
                 >
                     Cannot log in with the provided API key. Please review your API key.
-                    Click "Show guides" below if you need help.
-                </span>
+                    Click "Show Guide" below if you need help.
+                </el-alert>
 
-                <span class="help is-info">
-                    <a href="#" @click.prevent="toggleGuides" v-text="guideText"/>
-                </span>
+
             </div>
 
-            <div class="control">
-                <button class="button is-primary" @click.prevent="login">Login</button>
+            <div class="control d-flex justify-content-between">
+                <el-button type="primary" size="mini" @click.prevent="login">Login</el-button>
+                <el-switch v-model="showGuides" active-text="Show Guide" active-color="#13ce66"/>
             </div>
         </form>
 
 
-        <div v-if="showGuides" class="content small-text mt-05">
-            <ul>
+        <el-alert
+            v-show="showGuides"
+            title=""
+            type="info"
+            class="mt-05"
+        >
+            <ol>
                 <li>
-                    Head to <a href="https://viblo.asia/settings/oauth" target="_blank">
-                    <strong class="color-primary">API keys</strong></a> for your Viblo account.
+                    Head to <ext-link to="https://viblo.asia/settings/oauth">
+                    <strong class="text-primary">API keys</strong></ext-link> for your Viblo account.
                 </li>
                 <li>
-                    Click <strong class="color-primary">New API key</strong> button on the
-                    <strong class="color-primary">API keys</strong> panel,
+                    Click <strong class="text-primary">New API key</strong> button on the
+                    <strong class="text-primary">API keys</strong> panel,
                     and specify a name for your API key.
                 </li>
                 <li>
                     Copy the generated API key and paste it in the below form.
                     Note that this key is only visible once.
                 </li>
-            </ul>
-        </div>
+            </ol>
+        </el-alert>
     </section>
 </template>
 
 <script>
-    import Auth from '~/services/Auth';
-    import EventBus from '../EventBus';
+    import { mapActions } from 'vuex';
+    import { validateToken } from '~/utils/api';
 
     export default {
         data() {
@@ -72,29 +75,30 @@
         },
 
         methods: {
+            ...mapActions(['storeAuthToken']),
+
             toggleGuides() {
                 this.showGuides = !this.showGuides;
                 this.guideText = this.showGuides ? 'Hide Guides' : 'Show Guides';
             },
 
-            login() {
-                const oauthToken = this.form.oauthToken;
+            async login() {
+                const token = this.form.oauthToken;
 
-                if (!oauthToken || this.state.processing) {
+                if (!token || this.state.processing) {
                     return;
                 }
 
                 this.state.processing = true;
 
-                Auth.login(oauthToken)
-                    .then((user) => {
-                        chrome.runtime.reload();
-                        EventBus.$emit('logged-in', user);
-                    }).catch(() => {
-                        this.state.logInError = true;
-                    }).then(() => {
-                        this.state.processing = false;
-                    });
+                const validToken = await validateToken(token);
+                if (validToken) {
+                    this.storeAuthToken(token);
+                    chrome.runtime.reload();
+                } else {
+                    this.state.logInError = true;
+                    this.state.processing = false;
+                }
             }
         }
     };

@@ -1,12 +1,10 @@
 const path = require('path');
-const { DefinePlugin } = require('webpack');
-const DotenvPlugin = require('dotenv-webpack');
 const HtmlPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = (buildEnv = {}) => ({
+module.exports = {
     name: 'popup',
-    entry: ['./src/popup/index.js', './src/popup/sass/app.sass'],
+    entry: ['./src/popup/index.js', './src/popup/scss/app.scss'],
     output: {
         path: path.resolve(__dirname, './build/popup'),
         filename: 'popup.js'
@@ -31,11 +29,11 @@ module.exports = (buildEnv = {}) => ({
                 ]
             },
             {
-                test: /\.sass$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader?!sass-loader?indentedSyntax'
-                ]
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader?!sass-loader'
+                })
             },
             {
                 test: /\.js$/,
@@ -60,14 +58,6 @@ module.exports = (buildEnv = {}) => ({
             template: './src/popup/index.html',
             filename: 'popup.html'
         }),
-        new MiniCssExtractPlugin({
-            filename: 'popup.css'
-        }),
-        new DotenvPlugin({
-            path: buildEnv.envfile
-        }),
-        new DefinePlugin({
-            'process.env.BROWSER': buildEnv.BROWSER || 'chrome'
-        })
+        new ExtractTextPlugin('popup.css')
     ]
-});
+};

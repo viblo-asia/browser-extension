@@ -7,10 +7,15 @@ module.exports = buildEnv => (content) => {
 
     manifest.version = _get(buildEnv, 'version', pkg.version);
 
+    // Relax CSP for development to allow clearer source map
+    if (process.env.NODE_ENV !== 'production') {
+        manifest.content_security_policy = "script-src 'self' 'unsafe-eval'; object-src 'self'";
+    }
+
     if (browser === 'firefox') {
         manifest.applications = {
             gecko: {
-                strict_min_version: '52.0a1'
+                strict_min_version: '53'
             }
         };
     }

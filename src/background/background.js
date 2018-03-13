@@ -1,32 +1,16 @@
-import * as config from '~/config';
-import * as auth from 'viblo-sdk/auth';
-import axios from 'viblo-sdk/libs/axios';
+import { setUpApi, setAuthToken } from '~/utils/api';
 
-import AuthService from '../services/Auth';
-import Notifier from '../services/Notifier';
-import { initStorages } from '../storage/ChromeStorage';
-import { updateBadgeCounters } from './badge';
+import { initBadge } from './badge';
 import { initQuickSearch } from './quickSearch';
-import { listenForBroadcastNotifications } from './notifications';
+import { getToken } from '../storage/oauthToken';
+import { initNotifications } from './notifications';
 
-axios.defaults.baseURL = config.apiUrl;
+setUpApi();
+initQuickSearch();
 
-initStorages().then(() => chrome.runtime.reload());
+getToken().then((token) => {
+    setAuthToken(token);
 
-chrome.notifications.onClicked.addListener((notificationId) => {
-    Notifier.open(notificationId);
-});
-
-AuthService.getToken((oauthToken) => {
-    auth.setAccessToken({
-        token_type: 'Bearer',
-        access_token: oauthToken
-    });
-
-    axios.defaults.headers.common.Accept = 'application/json';
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-    initQuickSearch();
-    listenForBroadcastNotifications();
-    updateBadgeCounters(!!oauthToken);
+    initBadge();
+    initNotifications();
 });
