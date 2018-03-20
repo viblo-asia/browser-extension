@@ -14,8 +14,7 @@
     "permissions": [
         "tabs",
         "storage",
-        "notifications",
-        "<all_urls>"
+        "notifications"
     ],
     "omnibox": {
         "keyword": "viblo"

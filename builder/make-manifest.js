@@ -6,6 +6,7 @@ module.exports = buildEnv => (content) => {
     const browser = _get(buildEnv, 'browser', 'chrome').toLowerCase();
 
     manifest.version = _get(buildEnv, 'version', pkg.version);
+    manifest.permissions.push(process.env.ALLOW_ORIGIN);
 
     // Relax CSP for development to allow clearer source map
     if (process.env.NODE_ENV !== 'production') {
