@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { isDev } from '~/config';
+import _isNil from 'lodash/isNil';
 import actions from './actions';
 import mutations from './mutations';
 import authPlugin from './authPlugin';
@@ -21,7 +22,7 @@ const state = {
 };
 
 const getters = {
-    authenticated: state => state.authToken !== null
+    authenticated: state => !_isNil(state.authToken)
 };
 
 export default new Vuex.Store({
