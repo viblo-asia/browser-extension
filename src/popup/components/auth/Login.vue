@@ -1,34 +1,32 @@
 <template>
     <section class="section py-0">
-        <form>
-            <div class="control mb-05">
-                <el-input
-                    v-model="form.oauthToken"
-                    size="small"
-                    type="password"
-                    name="oauthToken"
-                    placeholder="Paste your private API token here..."
-                />
+        <div class="control mb-05">
+            <el-input
+                v-model="form.oauthToken"
+                size="small"
+                type="password"
+                name="oauthToken"
+                placeholder="Paste your private API token here..."
+                @keydown.native.enter.prevent="login"
+            />
 
-                <el-alert
-                    v-if="state.logInError"
-                    title=""
-                    type="error"
-                    class="mt-05"
-                >
-                    Cannot log in with the provided API key. Please review your API key.
-                    Click "Show Guide" below if you need help.
-                </el-alert>
+            <el-alert
+                v-if="state.logInError"
+                title=""
+                type="error"
+                class="mt-05"
+            >
+                Cannot log in with the provided API key. Please review your API key.
+                Click "Show Guide" below if you need help.
+            </el-alert>
 
 
-            </div>
+        </div>
 
-            <div class="control d-flex justify-content-between">
-                <el-button type="primary" size="mini" @click.prevent="login">Login</el-button>
-                <el-switch v-model="showGuides" active-text="Show Guide" active-color="#13ce66"/>
-            </div>
-        </form>
-
+        <div class="control d-flex justify-content-between">
+            <el-button type="primary" size="mini" @click.prevent="login">Login</el-button>
+            <el-switch v-model="showGuides" active-text="Show Guide" active-color="#13ce66"/>
+        </div>
 
         <el-alert
             v-show="showGuides"
