@@ -1,0 +1,49 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:vue/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "env": {
+    "webextensions": true
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.base.js"
+      }
+    }
+  },
+  "rules": {
+    "linebreak-style": "off",
+    "comma-dangle": ["error", "never"],
+    "camelcase":"off",
+    "indent": ["error", 4, {
+      "SwitchCase": 1
+    }],
+    "max-len": ["warn", 120],
+    "no-shadow": "off",
+    "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
+    "prefer-destructuring": "off",
+    "no-use-before-define": ["error", {
+      "functions": false
+    }],
+    "import/prefer-default-export": "off"
+  },
+  "overrides": {
+    "files": ["*.vue"],
+    "rules": {
+      "indent": "off",
+      "vue/html-indent": ["error", 4],
+      "vue/script-indent": "off",
+      "vue/max-attributes-per-line": ["error", {
+        "singleline": 3
+      }],
+      "vue/require-default-prop": "off",
+      "vue/require-prop-types": "off"
+    }
+  }
+}
