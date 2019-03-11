@@ -3,7 +3,7 @@
         <div class="item__icon">
             <avatar
                 :username="user.username"
-                :images="user.avatar"
+                :image="user.avatar"
                 class="avatar-md"
             />
         </div>

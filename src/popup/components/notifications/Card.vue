@@ -9,7 +9,7 @@
             <avatar
                 v-if="sender !== null"
                 :username="sender.username"
-                :images="sender.avatar"
+                :image="sender.avatar"
                 class="avatar-md"
             />
         </div>

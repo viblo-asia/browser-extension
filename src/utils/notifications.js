@@ -46,7 +46,7 @@ export function sendNotification(event) {
         send({
             url: notification.url,
             message: notification.title.text,
-            iconUrl: _get(sender, 'data.avatar.0')
+            iconUrl: _get(sender, 'data.avatar')
         });
     }
 }

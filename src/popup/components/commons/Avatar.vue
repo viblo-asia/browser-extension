@@ -1,5 +1,20 @@
 <script>
-    import { toUser } from '~/utils/url';
+    import { toUser, imageUrl } from '~/utils/url';
+    import defaultImage from '~assets/images/mm.png';
+
+    const getImageAttributes = image => {
+        if (!image) {
+            return { src: defaultImage };
+        }
+
+        const avatar = imageUrl(image, 'avatar');
+        const avatarRetina = imageUrl(image, 'avatar-retina');
+
+        return {
+            src: avatar,
+            srcset: `${avatar} 1x, ${avatarRetina} 2x`,
+        };
+    }
 
     export default {
         functional: true,
@@ -9,15 +24,11 @@
                 type: String,
                 required: true
             },
-            images: {
-                type: [Array, String],
-                required: true
-            }
+            image: String,
         },
 
         render: (h, { props, data }) => {
-            const images = props.images ? props.images : '~assets/images/mm.png';
-            const [desktop, retina] = typeof images === 'string' ? [images, images] : images;
+            const imageAttrs = getImageAttributes(props.image);
             const className = ['avatar', data.staticClass];
 
             return (
@@ -26,8 +37,7 @@
                     staticClass={className}
                 >
                     <img
-                        src={desktop}
-                        srcset={`${desktop} 1x, ${retina} 2x`}
+                        {...{attrs: {...imageAttrs}}}
                         title={props.username}
                     />
                 </ext-link>

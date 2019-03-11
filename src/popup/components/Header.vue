@@ -13,7 +13,7 @@
                 <avatar
                     v-if="user"
                     :username="user.username"
-                    :images="user.avatar"
+                    :image="user.avatar"
                 />
             </div>
         </ext-link>

@@ -3,7 +3,7 @@ import _flow from 'lodash/flow';
 import _fp_pick from 'lodash/fp/pick';
 import _fp_join from 'lodash/fp/join';
 import _fp_defaults from 'lodash/fp/defaults';
-import { browser, webUrl } from '../config';
+import { browser, webUrl, imageUrl as image } from '../config';
 
 const _fp_map = require('lodash/fp/map').convert({ cap: false });
 
@@ -50,4 +50,10 @@ export function toUser(user) {
     }
 
     return `${webUrl}/u/${username}`;
+}
+
+export function imageUrl(imageItem, size) {
+    return size
+        ? `${image}/${size}/${imageItem}`
+        : `${image}/${imageItem}`;
 }
