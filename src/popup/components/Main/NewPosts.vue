@@ -79,9 +79,3 @@
         }
     };
 </script>
-
-<style lang="css">
-    .infinite-status-prompt {
-        display: none !important
-    }
-</style>
