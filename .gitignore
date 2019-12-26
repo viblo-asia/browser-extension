@@ -12,3 +12,5 @@ npm-debug.log
 build
 dist
 jsconfig.json
+yarn.lock
+yarn-error.log
