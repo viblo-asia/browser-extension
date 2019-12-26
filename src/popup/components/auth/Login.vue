@@ -6,7 +6,7 @@
                 size="small"
                 type="password"
                 name="oauthToken"
-                placeholder="Paste your private API token here..."
+                placeholder="Paste your private personal access token here..."
                 @keydown.native.enter.prevent="login"
             />
 
@@ -16,7 +16,7 @@
                 type="error"
                 class="mt-05"
             >
-                Cannot log in with the provided API key. Please review your API key.
+                Cannot log in with the provided personal access token. Please review your personal access token.
                 Click "Show Guide" below if you need help.
             </el-alert>
 
@@ -36,17 +36,17 @@
         >
             <ol>
                 <li>
-                    Head to <ext-link to="https://viblo.asia/settings/oauth">
-                    <strong class="text-primary">API keys</strong></ext-link> for your Viblo account.
+                    Head to <ext-link to="https://accounts.viblo.asia/security/tokens">
+                    <strong class="text-primary">Personal Access Tokens</strong></ext-link> for your Viblo account.
                 </li>
                 <li>
-                    Click <strong class="text-primary">New API key</strong> button on the
-                    <strong class="text-primary">API keys</strong> panel,
-                    and specify a name for your API key.
+                    Click <strong class="text-primary">Generate new token</strong> button on the
+                    <strong class="text-primary">Personal Access Tokens</strong> panel,
+                    and specify a name for your personal access token.
                 </li>
                 <li>
-                    Copy the generated API key and paste it in the below form.
-                    Note that this key is only visible once.
+                    Copy the generated personal access token and paste it in the below form.
+                    Note that this token is only visible once.
                 </li>
             </ol>
         </el-alert>
