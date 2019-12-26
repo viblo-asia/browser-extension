@@ -17,9 +17,9 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-vue-app": "^2.0.0",
-    "copy-webpack-plugin": "^4.5.1",
+    "copy-webpack-plugin": "^5.1.1",
     "cross-env": "^5.1.4",
-    "css-loader": "^0.28.10",
+    "css-loader": "^3.4.0",
     "dotenv": "^5.0.1",
     "dotenv-webpack": "^1.5.5",
     "eslint": "^4.18.2",
@@ -39,8 +39,8 @@
     "style-loader": "^0.20.3",
     "vue-loader": "^14.2.1",
     "vue-template-compiler": "^2.5.14",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.11",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10",
     "yargs": "^11.0.0"
   },
   "dependencies": {
