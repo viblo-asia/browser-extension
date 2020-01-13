@@ -18,7 +18,7 @@ const promisify = fn => (...args) =>
  * @returns {Promise}
  */
 export function get(keys, storageArea) {
-    return promisify(chrome.storage[storageArea].get)(keys)
+    return promisify(chrome.storage[storageArea].get.bind(chrome.storage[storageArea]))(keys)
         .then(result => (typeof keys === 'string' ? result[keys] : result));
 }
 
@@ -28,7 +28,7 @@ export function get(keys, storageArea) {
  * @returns {Promise}
  */
 export function set(items, storageArea) {
-    return promisify(chrome.storage[storageArea].set)(items);
+    return promisify(chrome.storage[storageArea].set.bind(chrome.storage[storageArea]))(items);
 }
 
 /**
@@ -37,7 +37,7 @@ export function set(items, storageArea) {
  * @returns {Promise}
  */
 export function remove(keys, storageArea) {
-    return promisify(chrome.storage[storageArea].remove)(keys);
+    return promisify(chrome.storage[storageArea].remove.bind(chrome.storage[storageArea]))(keys);
 }
 
 /**
@@ -45,5 +45,5 @@ export function remove(keys, storageArea) {
  * @returns {Promise}
  */
 export function clear(storageArea) {
-    return promisify(chrome.storage[storageArea].clear)();
+    return promisify(chrome.storage[storageArea].clear.bind(chrome.storage[storageArea]))();
 }
