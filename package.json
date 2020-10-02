@@ -41,7 +41,7 @@
     "vue-template-compiler": "^2.5.14",
     "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10",
-    "yargs": "^11.0.0"
+    "yargs": "^13.1.2"
   },
   "dependencies": {
     "element-ui": "^2.2.1",
