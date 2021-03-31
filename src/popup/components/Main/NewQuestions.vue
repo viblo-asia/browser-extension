@@ -12,12 +12,13 @@
         </div>
 
         <el-scrollbar>
-            <template v-if="questions.length === 0 && loading">
+            <template v-if="loading">
                 <item-skeleton v-for="index in 8" :key="index" :count="3" />
             </template>
 
             <item
                 v-for="(question, index) in questions"
+                v-else
                 :key="index"
                 :url="toQuestion(question)"
                 :user="question.user.data"
