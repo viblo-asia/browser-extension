@@ -5,6 +5,10 @@
         </div>
 
         <el-scrollbar>
+            <template v-if="posts.length === 0 && loading">
+                <item-skeleton v-for="index in 8" :key="index" />
+            </template>
+
             <item
                 v-for="(post, index) in posts"
                 :key="index"
@@ -34,10 +38,12 @@
     import { getPostsFeed, PostFeedType } from 'viblo-sdk/api/posts';
 
     import Item from '../commons/Item.vue';
+    import ItemSkeleton from '../commons/ItemSkeleton.vue';
 
     export default {
         components: {
             Item,
+            ItemSkeleton,
             InfiniteLoading
         },
 
