@@ -12,6 +12,10 @@
         </div>
 
         <el-scrollbar>
+            <template v-if="questions.length === 0 && loading">
+                <item-skeleton v-for="index in 8" :key="index" :count="3" />
+            </template>
+
             <item
                 v-for="(question, index) in questions"
                 :key="index"
@@ -46,11 +50,13 @@
     import InfiniteLoading from 'vue-infinite-loading';
 
     import Item from '../commons/Item.vue';
+    import ItemSkeleton from '../commons/ItemSkeleton.vue';
 
     export default {
 
         components: {
             Item,
+            ItemSkeleton,
             InfiniteLoading
         },
 

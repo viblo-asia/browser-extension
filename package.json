@@ -1,5 +1,5 @@
 {
-  "version": "2.4.2",
+  "version": "2.5.0",
   "private": true,
   "scripts": {
     "lint": "eslint src",
@@ -51,6 +51,7 @@
     "viblo-sdk": "https://github.com/viblo-asia/sdk-js#558b4b0",
     "vue": "^2.5.14",
     "vue-infinite-loading": "^2.2.3",
+    "vue-loading-skeleton": "^1.1.9",
     "vuex": "^3.0.1"
   }
 }
